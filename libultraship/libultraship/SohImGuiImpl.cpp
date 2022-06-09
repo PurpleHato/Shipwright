@@ -777,6 +777,7 @@ namespace SohImGui {
 
                 EnhancementCheckbox("Show Inputs", "gInputEnabled");
                 Tooltip("Shows currently pressed inputs on the bottom right of the screen");
+                EnhancementCheckbox("Mouse/Touch Enabled", "gMouseTouchEnabled");
                 EnhancementCheckbox("Rumble Enabled", "gRumbleEnabled");
 
                 EnhancementSliderFloat("Input Scale: %.1f", "##Input", "gInputScale", 1.0f, 3.0f, "", 1.0f, false);
@@ -1006,6 +1007,7 @@ namespace SohImGui {
                     EnhancementCheckbox("Kokiri Draw Distance", "gDisableKokiriDrawDistance");
                     Tooltip("Kokiris are mystical being that appear from a certain distance\nEnable this will remove their draw distance\nNeeds to reload the map to take effect");
                 }
+                EnhancementCheckbox("Free Camera", "gFreeCamera");
 
                 ImGui::EndMenu();
             }
