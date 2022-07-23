@@ -105,7 +105,7 @@ void EnJj_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
             this->bodyCollisionActor = (DynaPolyActor*)Actor_SpawnAsChild(
                 &globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_JJ, this->dyna.actor.world.pos.x - 10.0f,
-                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.world.rot.y, 0,
+                this->dyna.actor.world.pos.y - 160.0f, this->dyna.actor.world.pos.z, 0, this->dyna.actor.world.rot.y, 0,
                 JABUJABU_COLLISION);
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&gJabuJabuHeadCol, &colHeader);
@@ -120,18 +120,20 @@ void EnJj_Init(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionHeader_GetVirtual(&gJabuJabuBodyCol, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             func_8003ECA8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            this->dyna.actor.world.pos.y - 160.0f;
             this->dyna.actor.update = EnJj_UpdateStaticCollision;
             this->dyna.actor.draw = NULL;
-            Actor_SetScale(&this->dyna.actor, 0.087f);
+            Actor_SetScale(&this->dyna.actor, 0.261f);
             break;
 
         case JABUJABU_UNUSED_COLLISION:
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&gJabuJabuUnusedCol, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+            this->dyna.actor.world.pos.y - 160.0f;
             this->dyna.actor.update = EnJj_UpdateStaticCollision;
             this->dyna.actor.draw = NULL;
-            Actor_SetScale(&this->dyna.actor, 0.087f);
+            Actor_SetScale(&this->dyna.actor, 0.261f);
             break;
     }
 }
@@ -299,7 +301,7 @@ void EnJj_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     EnJj_Blink(this);
     SkelAnime_Update(&this->skelAnime);
-    Actor_SetScale(&this->dyna.actor, 0.087f);
+    Actor_SetScale(&this->dyna.actor, 0.261f);
 
     // Head
     this->skelAnime.jointTable[10].z = this->mouthOpenAngle;
@@ -313,7 +315,7 @@ void EnJj_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_800943C8(globalCtx->state.gfxCtx);
-    Matrix_Translate(0.0f, (cosf(this->skelAnime.curFrame * (M_PI / 41.0f)) * 10.0f) - 10.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, (cosf(this->skelAnime.curFrame * (M_PI / 41.0f)) * 160.0f) - 160.0f, -40.0f, MTXMODE_APPLY);
     Matrix_Scale(10.0f, 10.0f, 10.0f, MTXMODE_APPLY);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(eyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
