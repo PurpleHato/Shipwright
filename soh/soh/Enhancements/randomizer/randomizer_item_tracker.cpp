@@ -1112,7 +1112,7 @@ void DrawFloatingStones(int Icon_Cells_Size, int Icon_Spacing){
 ImVec4 ChromaKeyBackground = { 0, 0, 0, 1 }; //Float value, 1 = 255 in rgb value. 
 void BeginFloatingWindows(std::string UniqueName){
     ImGuiWindowFlags FloatingWndFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
-    if (CVar_GetS32("gItemTrackerHudEditMode", 0) >= 2 || CVar_GetS32("gItemTrackerHudEditMode", 0) == 0) {
+    if (!CVar_GetS32("gItemTrackerHudEditMode", 0)) {
         FloatingWndFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
     }
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ChromaKeyBackground);
