@@ -1112,7 +1112,7 @@ void DrawFloatingStones(int Icon_Cells_Size, int Icon_Spacing){
 ImVec4 ChromaKeyBackground = { 0, 0, 0, 1 }; //Float value, 1 = 255 in rgb value. 
 void BeginFloatingWindows(std::string UniqueName){
     ImGuiWindowFlags FloatingWndFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
-    if (!CVar_GetS32("gItemTrackerHudEditMode", 0)) {
+    if (CVar_GetS32("gItemTrackerHudEditMode", 0) >= 2 || CVar_GetS32("gItemTrackerHudEditMode", 0) == 0) {
         FloatingWndFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
     }
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ChromaKeyBackground);
@@ -1133,7 +1133,7 @@ void DrawItemTracker(bool& open) {
     int Icon_Cells_Size = CVar_GetS32("gRandoTrackIconSize", 0);
     int Icon_Spacing = CVar_GetS32("gRandoTrackIconSpacing", 0);
 
-    if (CVar_GetS32("gItemTrackerHudDisplay", 0)) {
+    if (CVar_GetS32("gItemTrackerEnabled", 0)) {
         int ImGui_DefaultMargin = 0;
         if (CVar_GetS32("gItemTrackerTheme", 0) == 0) { //One block tracker, original tracker style
             BeginFloatingWindows("ItemTracker_Theme_0_Grouped");
@@ -1192,11 +1192,11 @@ void DrawItemTracker(bool& open) {
 
 void DrawItemTrackerOptions(bool& open) {
     if (!open) {
-        CVar_SetS32("gItemTrackerOptionsEnabled", 0);
+        CVar_SetS32("gItemTrackerSettingsEnabled", 0);
         return;
     }
 
-    ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(240, 285), ImGuiCond_FirstUseEver);
 
     if (!ImGui::Begin("Item Tracker Settings", &open, ImGuiWindowFlags_NoFocusOnAppearing)) {
         ImGui::End();
@@ -1271,7 +1271,7 @@ void DrawItemTrackerOptions(bool& open) {
     ImGui::End();
 }
 
-void InitItemTracker() {
-    SohImGui::AddWindow("Randomizer", "Item Tracker Settings", DrawItemTrackerOptions);
+void InitItemTracker() {   
     SohImGui::AddWindow("Randomizer", "Item Tracker", DrawItemTracker);
+    SohImGui::AddWindow("Randomizer", "Item Tracker Settings", DrawItemTrackerOptions);
 }

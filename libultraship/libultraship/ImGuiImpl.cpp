@@ -1587,6 +1587,8 @@ namespace SohImGui {
                 customWindows["Randomizer Settings"].enabled = CVar_GetS32("gRandomizerSettingsEnabled", 0);
                 EnhancementCheckbox("Item Tracker", "gItemTrackerEnabled");
                 customWindows["Item Tracker"].enabled = CVar_GetS32("gItemTrackerEnabled", 0);
+                EnhancementCheckbox("Item Tracker Settings", "gItemTrackerSettingsEnabled");
+                customWindows["Item Tracker Settings"].enabled = CVar_GetS32("gItemTrackerSettingsEnabled", 0);
 
                 ImGui::Separator();
                 if (ImGui::BeginMenu("Rando Enhancements"))
