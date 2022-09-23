@@ -26,6 +26,7 @@
 #include "include/global.h"
 #include "include/z64audio.h"
 #include "soh/SaveManager.h"
+#include <soh/Enhancements/online/Online.h>
 
 #define EXPERIMENTAL() \
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 50, 50, 255)); \
@@ -1431,6 +1432,38 @@ namespace GameMenuBar {
         }
 
         ImGui::SetCursorPosY(0.0f);
+
+        if (ImGui::BeginMenu("Online")) {
+            if (ImGui::BeginMenu("Server")) {
+                int newPort = CVar_GetS32("gOnlineServerPort", 25565);
+                ImGui::InputInt("Port", &newPort);
+                CVar_SetS32("gOnlineServerPort", newPort);
+
+                if (ImGui::Button("Host Game")) {
+                    Ship::Online::InitOnline(nullptr, newPort);
+                }
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Client")) {
+                const char* ipAddr = CVar_GetString("gOnlineClientIPAddress", "127.0.0.1");
+                ImGui::InputText("IP Address", (char*)ipAddr, 32);
+                CVar_SetString("gOnlineClientIPAddress", ipAddr);
+
+                int newPort = CVar_GetS32("gOnlineClientPort", 25565);
+                ImGui::InputInt("Port", &newPort);
+                CVar_SetS32("gOnlineClientPort", newPort);
+
+                if (ImGui::Button("Connect to Game")) {
+                    Ship::Online::InitOnline((char*)ipAddr, newPort);
+                }
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenu();
+        }
 
         if (ImGui::BeginMenu("Randomizer"))
         {
