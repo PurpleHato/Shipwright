@@ -11,6 +11,8 @@
 #include <assert.h>
 #endif
 
+#include "soh/Enhancements/debugconsole.h"
+
 
 static uint16_t _doActionTexWidth, _doActionTexHeight = -1;
 static uint16_t DO_ACTION_TEX_WIDTH() {
@@ -2909,6 +2911,14 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
     osSyncPrintf("＊＊＊＊＊  増減=%d (now=%d, max=%d)  ＊＊＊", healthChange, gSaveContext.health,
                  gSaveContext.healthCapacity);
 
+    // If one-hit ko mode is on, any damage kills you and you cannot gain health.
+    if (oneHitKO) {
+        if (healthChange < 0)
+            gSaveContext.health = 0;
+        
+        return 0;
+    }
+
     // clang-format off
     if (healthChange > 0) { Audio_PlaySoundGeneral(NA_SE_SY_HP_RECOVER, &D_801333D4, 4,
                                                    &D_801333E0, &D_801333E0, &D_801333E8);
@@ -2917,6 +2927,14 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
         osSyncPrintf("ハート減少半分！！＝%d\n", healthChange); // "Heart decrease halved!!＝%d"
     }
     // clang-format on
+
+    if (defenseModifier != 0 && healthChange < 0) {
+        if (defenseModifier > 0) {
+            healthChange /= defenseModifier;
+        } else {
+            healthChange *= abs(defenseModifier);
+        }
+    }
 
     gSaveContext.health += healthChange;
 
@@ -2950,6 +2968,10 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
 
 void Health_GiveHearts(s16 hearts) {
     gSaveContext.healthCapacity += hearts * 0x10;
+}
+
+void Health_RemoveHearts(s16 hearts) {
+    gSaveContext.healthCapacity -= hearts * 0x10;
 }
 
 void Rupees_ChangeBy(s16 rupeeChange) {
@@ -3018,7 +3040,7 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
 void Magic_Fill(GlobalContext* globalCtx) {
     if (gSaveContext.magicAcquired) {
         gSaveContext.unk_13F2 = gSaveContext.unk_13F0;
-        gSaveContext.unk_13F6 = (gSaveContext.doubleMagic * 0x30) + 0x30;
+        gSaveContext.unk_13F6 = (gSaveContext.doubleMagic + 1) * 0x30;
         gSaveContext.unk_13F0 = 9;
     }
 }
@@ -4734,6 +4756,10 @@ void Interface_Draw(GlobalContext* globalCtx) {
     s16 svar5;
     s16 svar6;
     bool fullUi = !CVar_GetS32("gMinimalUI", 0) || !R_MINIMAP_DISABLED || globalCtx->pauseCtx.state != 0;
+
+    if (noUI) {
+        return;
+    }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
