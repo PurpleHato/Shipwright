@@ -26,8 +26,6 @@ typedef struct {
     Vec3short rot;
 } PosRotOnline;
 
-void InitOnline(char* ipAddr, int port);
-
 typedef struct OnlinePacket {
     uint8_t player_id;
     uint16_t rupeeAmountChanged;
@@ -45,6 +43,9 @@ typedef struct OnlinePacket {
     uint8_t didDamage;
 } OnlinePacket;
 
+void InitOnline(char* ipAddr, int port);
+void SendPacketMessage(OnlinePacket* packet, TCPsocket* sendTo);
+
 class Server {
   private:
     std::thread onlineThread;
@@ -61,6 +62,7 @@ class Server {
 
     uint8_t my_player_id = 0;
 
+    ~Server();
     void CreateServer(int serverPort);
     void RunServer();
 };
@@ -79,9 +81,13 @@ class Client {
 
     bool clientConnected = false;
 
+    ~Client();
     void CreateClient(char* ipAddr, int port);
     void RunClient();
 };
+
+OnlinePacket serverPacket;
+OnlinePacket clientPacket;
 
 Server server = Server();
 Client client = Client();

@@ -112,6 +112,7 @@ GetItemEntry Randomizer_GetItemFromKnownCheckWithoutObtainabilityCheck(Randomize
 ItemObtainability Randomizer_GetItemObtainabilityFromRandomizerCheck(RandomizerCheck randomizerCheck);
 int CustomMessage_RetrieveIfExists(GlobalContext* globalCtx);
 void Overlay_DisplayText(float duration, const char* text);
+void OTRSendPacket();
 GetItemEntry ItemTable_Retrieve(int16_t getItemID);
 GetItemEntry ItemTable_RetrieveEntry(s16 modIndex, s16 getItemID);
 #endif

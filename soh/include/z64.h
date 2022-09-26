@@ -70,6 +70,25 @@ extern "C"
 {
 #endif
 
+typedef struct OnlinePacket {
+    uint8_t player_id;
+    uint16_t rupeeAmountChanged;
+    PosRot posRot;
+    uint8_t biggoron_broken;
+
+    // SkelAnime Data
+    Vec3s jointTable[0x16];
+
+    uint8_t sheathType;
+    uint8_t shieldType;
+    uint8_t leftHandType;
+    uint8_t rightHandType;
+
+    uint8_t didDamage;
+} OnlinePacket;
+
+OnlinePacket gPacket;
+
 typedef struct{
     /* 0x00 */ char unk[0x4];
     /* 0x04 */ MtxF mf;

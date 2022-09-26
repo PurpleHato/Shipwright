@@ -8,6 +8,7 @@
 #include "soh/frame_interpolation.h"
 #include "soh/Enhancements/debugconsole.h"
 #include <overlays/actors/ovl_En_Niw/z_en_niw.h>
+#include <overlays/actors/ovl_Link_Puppet/z_link_puppet.h>
 
 #include <time.h>
 
@@ -26,6 +27,7 @@ u64 D_801614D0[0xA00];
 #endif
 
 GlobalContext* gGlobalCtx;
+LinkPuppet* puppet;
 
 void func_800BC450(GlobalContext* globalCtx) {
     Camera_ChangeDataIdx(GET_ACTIVE_CAM(globalCtx), globalCtx->unk_1242B - 1);
@@ -503,6 +505,12 @@ void Gameplay_Init(GameState* thisx) {
     } else {
         globalCtx->unk_1242B = 0;
     }
+
+    puppet =
+        Actor_Spawn(&gGlobalCtx->actorCtx, gGlobalCtx, ACTOR_LINK_PUPPET, -32000.0f, -32000.0f, -32000.0f, 0, 0, 0, 0);
+    puppet->packet.posRot.pos.x = -32000.0f;
+    puppet->packet.posRot.pos.y = -32000.0f;
+    puppet->packet.posRot.pos.z = -32000.0f;
 
     Interface_SetSceneRestrictions(globalCtx);
     Environment_PlaySceneSequence(globalCtx);
@@ -1519,6 +1527,18 @@ void Gameplay_Main(GameState* thisx) {
         Gameplay_Update(globalCtx);
     }
 
+    gPacket.posRot.pos = GET_PLAYER(gGlobalCtx)->actor.world.pos;
+    gPacket.posRot.rot = GET_PLAYER(gGlobalCtx)->actor.shape.rot;
+    memcpy(gPacket.jointTable, GET_PLAYER(gGlobalCtx)->skelAnime.jointTable, 6 * PLAYER_LIMB_MAX);
+    gPacket.biggoron_broken = (gSaveContext.swordHealth <= 0.0f);
+
+    gPacket.shieldType = GET_PLAYER(gGlobalCtx)->currentShield;
+    gPacket.sheathType = GET_PLAYER(gGlobalCtx)->sheathType;
+    gPacket.leftHandType = GET_PLAYER(gGlobalCtx)->leftHandType;
+    gPacket.rightHandType = GET_PLAYER(gGlobalCtx)->rightHandType;
+
+    OTRSendPacket();
+
     if (1 && HREG(63)) {
         LOG_NUM("1", 1);
     }
@@ -1541,9 +1561,7 @@ void Gameplay_Main(GameState* thisx) {
         int newIngameTime = maxInGameDayTicks * percent;
 
         gSaveContext.dayTime = newIngameTime;
-
     }
-
 }
 
 u8 PlayerGrounded(Player* player) {
@@ -2023,5 +2041,11 @@ void Gameplay_PerformSave(GlobalContext* globalCtx) {
         if (CVar_GetS32("gAutosave", 0)) {
             Overlay_DisplayText(3.0f, "Game Saved");
         }
+    }
+}
+
+void SetLinkPuppetData(OnlinePacket* packet, u8 player_id) {
+    if (puppet != NULL) {
+        memcpy(&puppet->packet, packet, sizeof(OnlinePacket));
     }
 }

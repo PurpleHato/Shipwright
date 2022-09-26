@@ -29,6 +29,7 @@
 #define DRWAV_IMPLEMENTATION
 #include <dr_libs/wav.h>
 #include <libultraship/AudioPlayer.h>
+#include "Enhancements/online/Online.h"
 #include "Enhancements/controls/GameControlEditor.h"
 #include "Enhancements/cosmetics/CosmeticsEditor.h"
 #include "Enhancements/debugconsole.h"
@@ -1835,4 +1836,19 @@ extern "C" int CustomMessage_RetrieveIfExists(GlobalContext* globalCtx) {
 
 extern "C" void Overlay_DisplayText(float duration, const char* text) {
     SohImGui::GetGameOverlay()->TextDrawNotification(duration, true, text);
+}
+
+extern "C" void OTRSendPacket() {
+    SPDLOG_INFO("HAHA0");
+    if (Ship::Online::server.serverOpen) {
+        Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::server.serverSocket);
+        SPDLOG_INFO("HAHA1");
+    }
+    
+    if (Ship::Online::client.clientConnected) {
+        Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::client.clientSocket);
+        SPDLOG_INFO("HAHA2");
+    }
+
+    memset(&gPacket, 0, sizeof(gPacket));
 }

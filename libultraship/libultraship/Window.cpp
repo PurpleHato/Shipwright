@@ -39,6 +39,7 @@
 #elif defined(__WIIU__)
 #include "WiiUImpl.h"
 #endif
+#include "../../soh/soh/Enhancements/online/Online.h"
 
 
 #define LOAD_TEX(texPath) static_cast<Ship::Texture*>(Ship::Window::GetInstance()->GetResourceManager()->LoadResource(texPath).get());

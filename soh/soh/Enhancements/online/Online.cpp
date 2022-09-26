@@ -25,6 +25,12 @@ void InitOnline(char* ipAddr, int port)
     }
 }
 
+void SendPacketMessage(OnlinePacket* packet, TCPsocket* sendTo) {
+    if (sendTo != nullptr) {
+        SDLNet_TCP_Send(*sendTo, packet, sizeof(OnlinePacket));
+    }
+}
+
 void Server::RunServer() {
     SPDLOG_INFO("Server Started!\n");
 
@@ -55,18 +61,31 @@ void Server::RunServer() {
 
     SPDLOG_INFO("Server connected to Client!\n");
 
+    SDLNet_SocketSet ss = SDLNet_AllocSocketSet(2);
+    SDLNet_TCP_AddSocket(ss, clientSocket);
+
     while (serverOpen) {
-        /* read the buffer from client */
-        char message[1024];
-        int len = SDLNet_TCP_Recv(clientSocket, message, 1024);
-        if (!len) {
-            SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
+        int check = SDLNet_CheckSockets(ss, ~0);
+
+        if (SDLNet_SocketReady(clientSocket)) {
+            int len = SDLNet_TCP_Recv(clientSocket, &serverPacket, sizeof(OnlinePacket));
+            if (!len) {
+                SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
+                serverOpen = false;
+            } else if (len > 0) {
+                SetLinkPuppetData(&serverPacket, 0);
+                SPDLOG_INFO("Received: {0}", serverPacket.posRot.pos.x);
+            } else {
+                serverOpen = false;
+            }
         }
-
-        SPDLOG_INFO("Received: %.*s\n", len, message);
     }
+}
 
+Server::~Server() {
     SDLNet_TCP_Close(clientSocket);
+    SDLNet_TCP_Close(serverSocket);
+    onlineThread.join();
 }
 
 void Server::CreateServer(int serverPort) {
@@ -89,6 +108,11 @@ void Server::CreateServer(int serverPort) {
     serverOpen = true;
 
     onlineThread = std::thread(&Server::RunServer, this);
+}
+
+Client::~Client() {
+    SDLNet_TCP_Close(clientSocket);
+    onlineThread.join();
 }
 
 void Client::CreateClient(char* ipAddr, int port) {
@@ -114,27 +138,25 @@ void Client::CreateClient(char* ipAddr, int port) {
 void Client::RunClient() {
     SPDLOG_INFO("Client Connected to Server!\n");
 
+    SDLNet_SocketSet ss = SDLNet_AllocSocketSet(2);
+    SDLNet_TCP_AddSocket(ss, clientSocket);
+
     while (clientConnected) {
-        char message[1024] = "Hello World!";
-        int len = strlen(message);
+        int check = SDLNet_CheckSockets(ss, ~0);
 
-        /* strip the newline */
-        message[len - 1] = '\0';
-
-        if (len) {
-            int result;
-
-            /* print out the message */
-            SPDLOG_INFO("Sending: %.*s\n", len, message);
-
-            result = SDLNet_TCP_Send(clientSocket, message, len); /* add 1 for the NULL */
-
-            if (result < len)
-                SPDLOG_INFO("SDLNet_TCP_Send: %s\n", SDLNet_GetError());
+        if (SDLNet_SocketReady(clientSocket)) {
+            int len = SDLNet_TCP_Recv(clientSocket, &clientPacket, sizeof(OnlinePacket));
+            if (!len) {
+                SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
+                clientConnected = false;
+            } else if (len > 0) {
+                SetLinkPuppetData(&clientPacket, 0);
+                SPDLOG_INFO("Received: {0}", clientPacket.posRot.pos.x);
+            } else {
+                clientConnected = false;
+            }
         }
     }
-
-    SDLNet_TCP_Close(clientSocket);
 }
 
 } // namespace Online
