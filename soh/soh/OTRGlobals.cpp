@@ -1839,15 +1839,13 @@ extern "C" void Overlay_DisplayText(float duration, const char* text) {
 }
 
 extern "C" void OTRSendPacket() {
-    SPDLOG_INFO("HAHA0");
     if (Ship::Online::server.serverOpen) {
-        Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::server.serverSocket);
-        SPDLOG_INFO("HAHA1");
+        Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::server.clientSocket);
+        SPDLOG_INFO(gPacket.posRot.pos.x);
     }
     
     if (Ship::Online::client.clientConnected) {
         Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::client.clientSocket);
-        SPDLOG_INFO("HAHA2");
     }
 
     memset(&gPacket, 0, sizeof(gPacket));

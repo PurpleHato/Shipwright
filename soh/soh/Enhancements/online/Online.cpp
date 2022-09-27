@@ -26,7 +26,7 @@ void InitOnline(char* ipAddr, int port)
 }
 
 void SendPacketMessage(OnlinePacket* packet, TCPsocket* sendTo) {
-    if (sendTo != nullptr) {
+    if (*sendTo != nullptr) {
         SDLNet_TCP_Send(*sendTo, packet, sizeof(OnlinePacket));
     }
 }
