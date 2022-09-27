@@ -40,6 +40,10 @@ typedef struct OnlinePacket {
     uint8_t leftHandType;
     uint8_t rightHandType;
 
+    int16_t faceType;
+    uint8_t tunicType;
+    uint8_t bootsType;
+
     uint8_t didDamage;
 } OnlinePacket;
 

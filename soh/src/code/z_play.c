@@ -1527,6 +1527,7 @@ void Gameplay_Main(GameState* thisx) {
         Gameplay_Update(globalCtx);
     }
 
+
     gPacket.posRot.pos = GET_PLAYER(gGlobalCtx)->actor.world.pos;
     gPacket.posRot.rot = GET_PLAYER(gGlobalCtx)->actor.shape.rot;
     memcpy(gPacket.jointTable, GET_PLAYER(gGlobalCtx)->skelAnime.jointTable, 6 * PLAYER_LIMB_MAX);
@@ -1537,7 +1538,12 @@ void Gameplay_Main(GameState* thisx) {
     gPacket.leftHandType = GET_PLAYER(gGlobalCtx)->leftHandType;
     gPacket.rightHandType = GET_PLAYER(gGlobalCtx)->rightHandType;
 
+    gPacket.tunicType = GET_PLAYER(gGlobalCtx)->currentTunic;
+    gPacket.bootsType = GET_PLAYER(gGlobalCtx)->currentBoots;
+    gPacket.faceType = GET_PLAYER(gGlobalCtx)->actor.shape.face;
+
     OTRSendPacket();
+
 
     if (1 && HREG(63)) {
         LOG_NUM("1", 1);

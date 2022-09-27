@@ -198,5 +198,5 @@ void LinkPuppet_Draw(Actor* thisx, GlobalContext* globalCtx) {
     sp12C[1] = 0;
 
     func_8008F470(globalCtx, this->linkSkeleton.skeleton, this->linkSkeleton.jointTable, this->linkSkeleton.dListCount,
-                  0, 0, 0, 0, Puppet_OverrideLimbDraw, Puppet_PostLimbDraw, this);
+                  0, this->packet.tunicType, this->packet.bootsType, this->packet.faceType, Puppet_OverrideLimbDraw, Puppet_PostLimbDraw, this);
 }
