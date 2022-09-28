@@ -274,6 +274,7 @@ set(Source_Files__soh
     "soh/GameMenuBar.cpp"
     "soh/UIWidgets.hpp"
     "soh/UIWidgets.cpp"
+    "soh/CrashHandlerExt.cpp"
 )
 source_group("Source Files\\soh" FILES ${Source_Files__soh})
 
@@ -407,7 +408,6 @@ set(Source_Files__src__boot
     "src/boot/idle.c"
     "src/boot/is_debug.c"
     "src/boot/logutils.c"
-    "src/boot/missing_gcc_functions.c"
     "src/boot/stackcheck.c"
     "src/boot/viconfig.c"
     "src/boot/yaz0.c"

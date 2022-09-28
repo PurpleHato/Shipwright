@@ -31,19 +31,19 @@ extern GlobalContext* gGlobalCtx;
 
 #define CMD_REGISTER SohImGui::GetConsole()->AddCommand
 
-uint32_t noUI;
-uint32_t giantLink;
-uint32_t minishLink;
-uint32_t paperLink;
-uint32_t gravityLevel = 1;
-uint32_t resetLinkScale;
-uint32_t invisibleLink;
-uint32_t oneHitKO;
-uint32_t pacifistMode;
-int32_t defenseModifier;
-uint32_t noZ;
-uint32_t reverseControls;
-int32_t speedModifier;
+uint32_t chaosEffectNoUI;
+uint32_t chaosEffectGiantLink;
+uint32_t chaosEffectMinishLink;
+uint32_t chaosEffectPaperLink;
+uint32_t chaosEffectResetLinkScale;
+uint32_t chaosEffectInvisibleLink;
+uint32_t chaosEffectOneHitKO;
+uint32_t chaosEffectPacifistMode;
+int32_t chaosEffectDefenseModifier;
+uint32_t chaosEffectNoZ;
+uint32_t chaosEffectReverseControls;
+uint32_t chaosEffectGravityLevel = GRAVITY_LEVEL_NORMAL;
+int32_t chaosEffectSpeedModifier;
 
 static bool ActorSpawnHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>& args) {
     if ((args.size() != 9) && (args.size() != 3) && (args.size() != 6)) {
@@ -74,7 +74,7 @@ static bool ActorSpawnHandler(std::shared_ptr<Ship::Console> Console, const std:
             if (args[8][0] != ',') {
                 spawnPoint.rot.z = std::stoi(args[8]);
             }
-        case 5:
+        case 6:
             if (args[3][0] != ',') {
                 spawnPoint.pos.x = std::stoi(args[3]);
             }
@@ -91,6 +91,18 @@ static bool ActorSpawnHandler(std::shared_ptr<Ship::Console> Console, const std:
         SohImGui::GetConsole()->SendErrorMessage("Failed to spawn actor. Actor_Spawn returned NULL");
         return CMD_FAILED;
     }
+    return CMD_SUCCESS;
+}
+
+static bool GiveDekuShieldHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>&) {
+    // Give Deku Shield to the player, and automatically equip it when they're child and have no shield currently equiped.
+    Player* player = GET_PLAYER(gGlobalCtx);
+    Item_Give(gGlobalCtx, ITEM_SHIELD_DEKU);
+    if (LINK_IS_CHILD && player->currentShield == PLAYER_SHIELD_NONE) {
+        player->currentShield = PLAYER_SHIELD_DEKU;
+        Inventory_ChangeEquipment(EQUIP_SHIELD, PLAYER_SHIELD_DEKU);
+    }
+    SohImGui::GetConsole()->SendInfoMessage("[SOH] Gave Deku Shield");
     return CMD_SUCCESS;
 }
 
@@ -134,9 +146,10 @@ static bool LoadSceneHandler(std::shared_ptr<Ship::Console> Console, const std::
     return CMD_SUCCESS;
 }
 
-static bool RuppeHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>& args) {
-    if (args.size() < 2)
+static bool RupeeHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>& args) {
+    if (args.size() < 2) {
         return CMD_FAILED;
+    }
 
     int rupeeAmount;
     try {
@@ -453,8 +466,8 @@ static bool InvisibleHandler(std::shared_ptr<Ship::Console> Console, const std::
     }
 
     try {
-        invisibleLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
-        if (!invisibleLink) {
+        chaosEffectInvisibleLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        if (!chaosEffectInvisibleLink) {
             Player* player = GET_PLAYER(gGlobalCtx);
             player->actor.shape.shadowDraw = ActorShadow_DrawFeet;
         }
@@ -473,12 +486,12 @@ static bool GiantLinkHandler(std::shared_ptr<Ship::Console> Console, const std::
     }
 
     try {
-        giantLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
-        if (giantLink) {
-            paperLink = 0;
-            minishLink = 0;
+        chaosEffectGiantLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        if (chaosEffectGiantLink) {
+            chaosEffectPaperLink = 0;
+            chaosEffectMinishLink = 0;
         } else {
-            resetLinkScale = 1;
+            chaosEffectResetLinkScale = 1;
         }
 
         return CMD_SUCCESS;
@@ -495,12 +508,12 @@ static bool MinishLinkHandler(std::shared_ptr<Ship::Console> Console, const std:
     }
 
     try {
-        minishLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
-        if (minishLink) {
-            paperLink = 0;
-            giantLink = 0;
+        chaosEffectMinishLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        if (chaosEffectMinishLink) {
+            chaosEffectPaperLink = 0;
+            chaosEffectGiantLink = 0;
         } else {
-            resetLinkScale = 1;
+            chaosEffectResetLinkScale = 1;
         }
 
         return CMD_SUCCESS;
@@ -533,7 +546,7 @@ static bool GravityHandler(std::shared_ptr<Ship::Console> Console, const std::ve
     }
 
     try {
-        gravityLevel = Ship::Math::clamp(std::stoi(args[1], nullptr, 10), 0.0f, 2.0f);
+        chaosEffectGravityLevel = Ship::Math::clamp(std::stoi(args[1], nullptr, 10), GRAVITY_LEVEL_LIGHT, GRAVITY_LEVEL_HEAVY);
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] Minish value must be a number.");
@@ -548,7 +561,7 @@ static bool NoUIHandler(std::shared_ptr<Ship::Console> Console, const std::vecto
     }
 
     try {
-        noUI = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        chaosEffectNoUI = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] No UI value must be a number.");
@@ -557,13 +570,8 @@ static bool NoUIHandler(std::shared_ptr<Ship::Console> Console, const std::vecto
 }
 
 static bool FreezeHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>& args) {
-    Player* player = GET_PLAYER(gGlobalCtx);
-    if (PlayerGrounded(player)) {
-        func_80837C0C(gGlobalCtx, player, 3, 0, 0, 0, 0);
-        return CMD_SUCCESS;
-    }
-
-    return CMD_FAILED;
+    gSaveContext.pendingIceTrapCount++;
+    return CMD_SUCCESS;
 }
 
 static bool DefenseModifierHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>& args) {
@@ -573,7 +581,7 @@ static bool DefenseModifierHandler(std::shared_ptr<Ship::Console> Console, const
     }
 
     try {
-        defenseModifier = std::stoi(args[1], nullptr, 10);
+        chaosEffectDefenseModifier = std::stoi(args[1], nullptr, 10);
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] Defense modifier value must be a number.");
@@ -645,7 +653,7 @@ static bool NoZHandler(std::shared_ptr<Ship::Console> Console, const std::vector
     }
 
     try {
-        noZ = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        chaosEffectNoZ = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] NoZ value must be a number.");
@@ -660,7 +668,7 @@ static bool OneHitKOHandler(std::shared_ptr<Ship::Console> Console, const std::v
     }
 
     try {
-        oneHitKO = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        chaosEffectOneHitKO = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] One-hit KO value must be a number.");
@@ -675,7 +683,10 @@ static bool PacifistHandler(std::shared_ptr<Ship::Console> Console, const std::v
     }
 
     try {
-        pacifistMode = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        chaosEffectPacifistMode = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        // Force interface to update to make the buttons transparent
+        gSaveContext.unk_13E8 = 50;
+        Interface_Update(gGlobalCtx);
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] Pacifist value must be a number.");
@@ -690,12 +701,12 @@ static bool PaperLinkHandler(std::shared_ptr<Ship::Console> Console, const std::
     }
 
     try {
-        paperLink = Ship::Math::clamp(std::stoi(args[1], nullptr, 10), 0.0f, 2.0f);
-        if (paperLink) {
-            minishLink = 0;
-            giantLink = 0;
+        chaosEffectPaperLink = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        if (chaosEffectPaperLink) {
+            chaosEffectMinishLink = 0;
+            chaosEffectGiantLink = 0;
         } else {
-            resetLinkScale = 1;
+            chaosEffectResetLinkScale = 1;
         }
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
@@ -754,7 +765,7 @@ static bool ReverseControlsHandler(std::shared_ptr<Ship::Console> Console, const
     }
 
     try {
-        reverseControls = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
+        chaosEffectReverseControls = std::stoi(args[1], nullptr, 10) == 0 ? 0 : 1;
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] Reverse controls value must be a number.");
@@ -785,7 +796,7 @@ static bool SpeedModifierHandler(std::shared_ptr<Ship::Console> Console, const s
     }
 
     try {
-        speedModifier = std::stoi(args[1], nullptr, 10);
+        chaosEffectSpeedModifier = std::stoi(args[1], nullptr, 10);
         return CMD_SUCCESS;
     } catch (std::invalid_argument const& ex) {
         SohImGui::GetConsole()->SendErrorMessage("[SOH] Speed modifier value must be a number.");
@@ -867,15 +878,9 @@ static bool BurnHandler(std::shared_ptr<Ship::Console> Console, const std::vecto
 
 static bool CuccoStormHandler(std::shared_ptr<Ship::Console> Console, const std::vector<std::string>& args) {
     Player* player = GET_PLAYER(gGlobalCtx);
-    Camera* camera = GET_ACTIVE_CAM(gGlobalCtx);
-
-    if (camera->camDataIdx == 1) {
-        return CMD_FAILED;
-    }
-
     EnNiw* cucco = (EnNiw*)Actor_Spawn(&gGlobalCtx->actorCtx, gGlobalCtx, ACTOR_EN_NIW, player->actor.world.pos.x,
-                                       player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
-    cucco->actionFunc = func_80AB70A0;
+                                       player->actor.world.pos.y + 2200, player->actor.world.pos.z, 0, 0, 0, 0);
+    cucco->actionFunc = func_80AB70A0_nocutscene;
     return CMD_SUCCESS;
 }
 
@@ -991,13 +996,16 @@ void DebugConsole_Init(void) {
 
     CMD_REGISTER("map",  { LoadSceneHandler, "Load up kak?" });
 
-    CMD_REGISTER("rupee", { RuppeHandler, "Set your rupee counter.", {
+    CMD_REGISTER("rupee", { RupeeHandler, "Set your rupee counter.", {
         {"amount", Ship::ArgumentType::NUMBER }
     }});
 
     CMD_REGISTER("bItem", { BHandler, "Set an item to the B button.", {
         { "Item ID", Ship::ArgumentType::NUMBER }
     }});
+
+    CMD_REGISTER("givedekushield", { GiveDekuShieldHandler, "Gives a deku shield and equips it when Link is a child with no shield equiped." });
+
     CMD_REGISTER("spawn", { ActorSpawnHandler, "Spawn an actor.", { { "actor_id", Ship::ArgumentType::NUMBER },
                               { "data", Ship::ArgumentType::NUMBER },
                               { "x", Ship::ArgumentType::PLAYER_POS, true },

@@ -1573,6 +1573,10 @@ u8 PlayerGrounded(Player* player) {
     return IS_ZERO(player->actor.world.pos.y - player->actor.floorHeight);
 }
 
+u8 PlayerGrounded(Player* player) {
+    return player->actor.bgCheckFlags & 1;
+}
+
 // original name: "Game_play_demo_mode_check"
 s32 Gameplay_InCsMode(GlobalContext* globalCtx) {
     return (globalCtx->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(globalCtx);

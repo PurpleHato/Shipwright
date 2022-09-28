@@ -75,11 +75,13 @@ class CrowdControl {
         char received[512];
 
         std::vector<CCPacket*> receivedCommands;
+        std::mutex receivedCommandsMutex;
 
         void RunCrowdControl(CCPacket* packet);
         void ReceiveFromCrowdControl();
-        uint8_t ExecuteEffect(const char* effectId, uint32_t value);
-        void RemoveEffect(const char* effectId);
+        EffectResult ExecuteEffect(std::string effectId, uint32_t value, bool dryRun);
+        bool SpawnEnemy(std::string effectId);
+        void RemoveEffect(std::string effectId);
 
     public:
         static CrowdControl* Instance;

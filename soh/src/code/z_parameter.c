@@ -937,7 +937,11 @@ void func_80083108(GlobalContext* globalCtx) {
                 Interface_ChangeAlpha(50);
             }
         } else if (msgCtx->msgMode == MSGMODE_NONE) {
-            if ((func_8008F2F8(globalCtx) >= 2) && (func_8008F2F8(globalCtx) < 5)) {
+            if (chaosEffectPacifistMode) {
+                gSaveContext.buttonStatus[0] = gSaveContext.buttonStatus[1] = gSaveContext.buttonStatus[2] =
+                gSaveContext.buttonStatus[3] = gSaveContext.buttonStatus[5] = gSaveContext.buttonStatus[6] =
+                gSaveContext.buttonStatus[7] = gSaveContext.buttonStatus[8] = BTN_DISABLED;
+            } else if ((func_8008F2F8(globalCtx) >= 2) && (func_8008F2F8(globalCtx) < 5)) {
                 if (gSaveContext.buttonStatus[0] != BTN_DISABLED) {
                     sp28 = 1;
                 }
@@ -2609,6 +2613,10 @@ void PerformAutosave(GlobalContext* globalCtx, u8 item) {
                 case ITEM_ARROWS_LARGE:
                 case ITEM_SEEDS_30:
                     break;
+                case ITEM_SWORD_MASTER:
+                    if (globalCtx->sceneNum == SCENE_GANON_DEMO) {
+                        break;
+                    }
                 default:
                     Gameplay_PerformSave(globalCtx);
                     break;
@@ -2912,9 +2920,10 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
                  gSaveContext.healthCapacity);
 
     // If one-hit ko mode is on, any damage kills you and you cannot gain health.
-    if (oneHitKO) {
-        if (healthChange < 0)
+    if (chaosEffectOneHitKO) {
+        if (healthChange < 0) {
             gSaveContext.health = 0;
+        }
         
         return 0;
     }
@@ -2928,11 +2937,11 @@ s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
     }
     // clang-format on
 
-    if (defenseModifier != 0 && healthChange < 0) {
-        if (defenseModifier > 0) {
-            healthChange /= defenseModifier;
+    if (chaosEffectDefenseModifier != 0 && healthChange < 0) {
+        if (chaosEffectDefenseModifier > 0) {
+            healthChange /= chaosEffectDefenseModifier;
         } else {
-            healthChange *= abs(defenseModifier);
+            healthChange *= abs(chaosEffectDefenseModifier);
         }
     }
 
@@ -4757,7 +4766,7 @@ void Interface_Draw(GlobalContext* globalCtx) {
     s16 svar6;
     bool fullUi = !CVar_GetS32("gMinimalUI", 0) || !R_MINIMAP_DISABLED || globalCtx->pauseCtx.state != 0;
 
-    if (noUI) {
+    if (chaosEffectNoUI) {
         return;
     }
 
