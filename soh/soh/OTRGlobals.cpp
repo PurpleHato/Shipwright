@@ -1840,10 +1840,15 @@ extern "C" void Overlay_DisplayText(float duration, const char* text) {
 
 extern "C" void OTRSendPacket() {
     if (Ship::Online::server.serverOpen) {
-        Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::server.clientSocket);
-        SPDLOG_INFO(gPacket.posRot.pos.x);
+        for (size_t i = 0; i < MAX_PLAYERS; i++) {
+            if (&Ship::Online::server.clientSockets[i] != nullptr) {
+                gPacket.player_id = i;
+                Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket,
+                                                &Ship::Online::server.clientSockets[i]);
+            }
+        }
     }
-    
+
     if (Ship::Online::client.clientConnected) {
         Ship::Online::SendPacketMessage((Ship::Online::OnlinePacket*)&gPacket, &Ship::Online::client.clientSocket);
     }

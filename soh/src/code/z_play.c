@@ -27,7 +27,7 @@ u64 D_801614D0[0xA00];
 #endif
 
 GlobalContext* gGlobalCtx;
-LinkPuppet* puppet;
+LinkPuppet* puppets[32];
 
 void func_800BC450(GlobalContext* globalCtx) {
     Camera_ChangeDataIdx(GET_ACTIVE_CAM(globalCtx), globalCtx->unk_1242B - 1);
@@ -506,11 +506,10 @@ void Gameplay_Init(GameState* thisx) {
         globalCtx->unk_1242B = 0;
     }
 
-    puppet =
-        Actor_Spawn(&gGlobalCtx->actorCtx, gGlobalCtx, ACTOR_LINK_PUPPET, -32000.0f, -32000.0f, -32000.0f, 0, 0, 0, 0);
-    puppet->packet.posRot.pos.x = -32000.0f;
-    puppet->packet.posRot.pos.y = -32000.0f;
-    puppet->packet.posRot.pos.z = -32000.0f;
+    for (size_t i = 0; i < 32; i++) {
+        puppets[i] = Actor_Spawn(&gGlobalCtx->actorCtx, gGlobalCtx, ACTOR_LINK_PUPPET, -32000.0f, -32000.0f, -32000.0f,
+                                 0, 0, 0, 0);
+    }
 
     Interface_SetSceneRestrictions(globalCtx);
     Environment_PlaySceneSequence(globalCtx);
@@ -1541,9 +1540,9 @@ void Gameplay_Main(GameState* thisx) {
     gPacket.tunicType = GET_PLAYER(gGlobalCtx)->currentTunic;
     gPacket.bootsType = GET_PLAYER(gGlobalCtx)->currentBoots;
     gPacket.faceType = GET_PLAYER(gGlobalCtx)->actor.shape.face;
+    gPacket.scene_id = gGlobalCtx->sceneNum;
 
     OTRSendPacket();
-
 
     if (1 && HREG(63)) {
         LOG_NUM("1", 1);
@@ -2051,7 +2050,7 @@ void Gameplay_PerformSave(GlobalContext* globalCtx) {
 }
 
 void SetLinkPuppetData(OnlinePacket* packet, u8 player_id) {
-    if (puppet != NULL) {
-        memcpy(&puppet->packet, packet, sizeof(OnlinePacket));
+    if (puppets[player_id] != NULL) {
+        memcpy(&puppets[player_id]->packet, packet, sizeof(OnlinePacket));
     }
 }

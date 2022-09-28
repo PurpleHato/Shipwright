@@ -135,8 +135,14 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
-    this->actor.world.pos = this->packet.posRot.pos;
-    this->actor.shape.rot = this->packet.posRot.rot;
+    if (globalCtx->sceneNum == this->packet.scene_id) {
+        this->actor.world.pos = this->packet.posRot.pos;
+        this->actor.shape.rot = this->packet.posRot.rot;
+    } else {
+        this->actor.world.pos.x = -32000.0f;
+        this->actor.world.pos.y = -32000.0f;
+        this->actor.world.pos.z = -32000.0f;
+    }
 
     if (this->packet.jointTable != NULL) {
         this->linkSkeleton.jointTable = this->packet.jointTable;

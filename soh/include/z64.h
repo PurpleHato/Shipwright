@@ -75,6 +75,7 @@ typedef struct OnlinePacket {
     uint16_t rupeeAmountChanged;
     PosRot posRot;
     uint8_t biggoron_broken;
+    uint16_t scene_id;
 
     // SkelAnime Data
     Vec3s jointTable[0x16];

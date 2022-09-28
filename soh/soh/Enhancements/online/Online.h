@@ -13,6 +13,8 @@
 namespace Ship {
 namespace Online {
 
+#define MAX_PLAYERS 32
+
 typedef struct {
     float x, y, z;
 } Vec3float; // size = 0x0C
@@ -31,6 +33,7 @@ typedef struct OnlinePacket {
     uint16_t rupeeAmountChanged;
     PosRotOnline posRot;
     uint8_t biggoron_broken;
+    uint16_t scene_id;
 
     // SkelAnime Data
     Vec3short jointTable[0x16];
@@ -53,20 +56,19 @@ void SendPacketMessage(OnlinePacket* packet, TCPsocket* sendTo);
 class Server {
   private:
     std::thread onlineThread;
+    std::thread connectionsThread;
 
   public:
     IPaddress ip;
     int port;
 
     bool serverOpen = false;
-    bool clientConnected = false;
 
     TCPsocket serverSocket;
-    TCPsocket clientSocket;
-
-    uint8_t my_player_id = 0;
+    TCPsocket clientSockets[MAX_PLAYERS];
 
     ~Server();
+    void WaitForConnections();
     void CreateServer(int serverPort);
     void RunServer();
 };
@@ -80,8 +82,6 @@ class Client {
     int port;
 
     TCPsocket clientSocket;
-
-    uint8_t my_player_id = 0;
 
     bool clientConnected = false;
 

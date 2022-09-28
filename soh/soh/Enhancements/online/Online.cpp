@@ -34,58 +34,63 @@ void SendPacketMessage(OnlinePacket* packet, TCPsocket* sendTo) {
 void Server::RunServer() {
     SPDLOG_INFO("Server Started!\n");
 
-    while (!clientConnected) {
-        /* try to accept a connection */
-        clientSocket = SDLNet_TCP_Accept(serverSocket);
-
-        if (!clientSocket) {
-            SPDLOG_INFO("Searching for Client...\n");
-            SDL_Delay(1000);
-            continue;
-        }
-
-        clientConnected = true;
-    }
-
-    /* get the clients IP and port number */
-    IPaddress* remoteip;
-    remoteip = SDLNet_TCP_GetPeerAddress(clientSocket);
-    if (!remoteip) {
-        SPDLOG_INFO("SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
-        return;
-    }
-
-    /* print out the clients IP and port number */
-    Uint32 ipaddr;
-    ipaddr = SDL_SwapBE32(remoteip->host);
-
-    SPDLOG_INFO("Server connected to Client!\n");
-
-    SDLNet_SocketSet ss = SDLNet_AllocSocketSet(2);
-    SDLNet_TCP_AddSocket(ss, clientSocket);
+    connectionsThread = std::thread(&Server::WaitForConnections, this);
 
     while (serverOpen) {
-        int check = SDLNet_CheckSockets(ss, ~0);
+        for (size_t i = 0; i < MAX_PLAYERS; i++) {
+            if (clientSockets[i] != nullptr) {
+                int len = SDLNet_TCP_Recv(clientSockets[i], &serverPacket, sizeof(OnlinePacket));
 
-        if (SDLNet_SocketReady(clientSocket)) {
-            int len = SDLNet_TCP_Recv(clientSocket, &serverPacket, sizeof(OnlinePacket));
-            if (!len) {
-                SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
-                serverOpen = false;
-            } else if (len > 0) {
-                SetLinkPuppetData(&serverPacket, 0);
-                SPDLOG_INFO("Received: {0}", serverPacket.posRot.pos.x);
-            } else {
-                serverOpen = false;
+                if (!len) {
+                    SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
+                } else if (len > 0) {
+                    SetLinkPuppetData(&serverPacket, i);
+                } else {
+                    free(clientSockets[i]);
+                    clientSockets[i] = nullptr;
+                }
+            }
+        }
+    }
+}
+
+void Server::WaitForConnections() {
+    while (serverOpen) {
+        /* try to accept a connection */
+        for (size_t i = 0; i < MAX_PLAYERS; i++) {
+            if (clientSockets[i] == nullptr) {
+                clientSockets[i] = SDLNet_TCP_Accept(serverSocket);
+
+                if (clientSockets[i] == nullptr) {
+                    SDL_Delay(1000);
+                    break;
+                }
+
+                /* get the clients IP and port number */
+                IPaddress* remoteip;
+                remoteip = SDLNet_TCP_GetPeerAddress(clientSockets[i]);
+                if (!remoteip) {
+                    SPDLOG_INFO("SDLNet_TCP_GetPeerAddress: %s\n", SDLNet_GetError());
+                    return;
+                }
+
+                /* print out the clients IP and port number */
+                Uint32 ipaddr;
+                ipaddr = SDL_SwapBE32(remoteip->host);
+
+                SPDLOG_INFO("Server connected to Client!\n");
             }
         }
     }
 }
 
 Server::~Server() {
-    SDLNet_TCP_Close(clientSocket);
+    for (size_t i = 0; i < MAX_PLAYERS; i++) {
+        SDLNet_TCP_Close(clientSockets[i]);
+    }
     SDLNet_TCP_Close(serverSocket);
     onlineThread.join();
+    connectionsThread.join();
 }
 
 void Server::CreateServer(int serverPort) {
@@ -138,23 +143,14 @@ void Client::CreateClient(char* ipAddr, int port) {
 void Client::RunClient() {
     SPDLOG_INFO("Client Connected to Server!\n");
 
-    SDLNet_SocketSet ss = SDLNet_AllocSocketSet(2);
-    SDLNet_TCP_AddSocket(ss, clientSocket);
-
     while (clientConnected) {
-        int check = SDLNet_CheckSockets(ss, ~0);
-
-        if (SDLNet_SocketReady(clientSocket)) {
-            int len = SDLNet_TCP_Recv(clientSocket, &clientPacket, sizeof(OnlinePacket));
-            if (!len) {
-                SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
-                clientConnected = false;
-            } else if (len > 0) {
-                SetLinkPuppetData(&clientPacket, 0);
-                SPDLOG_INFO("Received: {0}", clientPacket.posRot.pos.x);
-            } else {
-                clientConnected = false;
-            }
+        int len = SDLNet_TCP_Recv(clientSocket, &clientPacket, sizeof(OnlinePacket));
+        if (!len) {
+            SPDLOG_INFO("SDLNet_TCP_Recv: %s\n", SDLNet_GetError());
+        } else if (len > 0) {
+            SetLinkPuppetData(&clientPacket, clientPacket.player_id);
+        } else {
+            clientConnected = false;
         }
     }
 }
