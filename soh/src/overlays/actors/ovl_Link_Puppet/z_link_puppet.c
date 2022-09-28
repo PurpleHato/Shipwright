@@ -47,39 +47,49 @@ static Vec3s D_80854730 = { -57, 3377, 0 };
 
 extern func_80833338(Player* this);
 
+typedef enum {
+    PUPPET_DMGEFF_NONE,
+    PUPPET_DMGEFF_NORMAL,
+    PUPPET_DMGEFF_ICE,
+    PUPPET_DMGEFF_FIRE,
+    PUPPET_DMGEFF_THUNDER,
+    PUPPET_DMGEFF_KNOCKBACK,
+    PUPPET_DMGEFF_STUN,
+} PuppetDamageEffect;
+
 static DamageTable sDamageTable[] = {
-    /* Deku nut      */ DMG_ENTRY(0, 0x1),
-    /* Deku stick    */ DMG_ENTRY(2, 0x0),
-    /* Slingshot     */ DMG_ENTRY(1, 0x0),
-    /* Explosive     */ DMG_ENTRY(2, 0x0),
-    /* Boomerang     */ DMG_ENTRY(0, 0x1),
-    /* Normal arrow  */ DMG_ENTRY(2, 0x0),
-    /* Hammer swing  */ DMG_ENTRY(2, 0x0),
-    /* Hookshot      */ DMG_ENTRY(0, 0x1),
-    /* Kokiri sword  */ DMG_ENTRY(1, 0x0),
-    /* Master sword  */ DMG_ENTRY(2, 0x0),
-    /* Giant's Knife */ DMG_ENTRY(4, 0x0),
-    /* Fire arrow    */ DMG_ENTRY(2, 0x0),
-    /* Ice arrow     */ DMG_ENTRY(2, 0x0),
-    /* Light arrow   */ DMG_ENTRY(2, 0x0),
-    /* Unk arrow 1   */ DMG_ENTRY(2, 0x0),
-    /* Unk arrow 2   */ DMG_ENTRY(2, 0x0),
-    /* Unk arrow 3   */ DMG_ENTRY(2, 0x0),
-    /* Fire magic    */ DMG_ENTRY(2, 0xE),
-    /* Ice magic     */ DMG_ENTRY(0, 0x6),
-    /* Light magic   */ DMG_ENTRY(3, 0xD),
-    /* Shield        */ DMG_ENTRY(0, 0x0),
-    /* Mirror Ray    */ DMG_ENTRY(0, 0x0),
-    /* Kokiri spin   */ DMG_ENTRY(1, 0x0),
-    /* Giant spin    */ DMG_ENTRY(4, 0x0),
-    /* Master spin   */ DMG_ENTRY(2, 0x0),
-    /* Kokiri jump   */ DMG_ENTRY(2, 0x0),
-    /* Giant jump    */ DMG_ENTRY(8, 0x0),
-    /* Master jump   */ DMG_ENTRY(4, 0x0),
-    /* Unknown 1     */ DMG_ENTRY(0, 0x0),
-    /* Unblockable   */ DMG_ENTRY(0, 0x0),
-    /* Hammer jump   */ DMG_ENTRY(4, 0x0),
-    /* Unknown 2     */ DMG_ENTRY(0, 0x0),
+    /* Deku nut      */ DMG_ENTRY(0, PUPPET_DMGEFF_STUN),
+    /* Deku stick    */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Slingshot     */ DMG_ENTRY(1, PUPPET_DMGEFF_NONE),
+    /* Explosive     */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Boomerang     */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
+    /* Normal arrow  */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Hammer swing  */ DMG_ENTRY(2, PUPPET_DMGEFF_KNOCKBACK),
+    /* Hookshot      */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
+    /* Kokiri sword  */ DMG_ENTRY(1, PUPPET_DMGEFF_NONE),
+    /* Master sword  */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Giant's Knife */ DMG_ENTRY(4, PUPPET_DMGEFF_NONE),
+    /* Fire arrow    */ DMG_ENTRY(2, PUPPET_DMGEFF_FIRE),
+    /* Ice arrow     */ DMG_ENTRY(2, PUPPET_DMGEFF_ICE),
+    /* Light arrow   */ DMG_ENTRY(2, PUPPET_DMGEFF_THUNDER),
+    /* Unk arrow 1   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Unk arrow 2   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Unk arrow 3   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Fire magic    */ DMG_ENTRY(2, PUPPET_DMGEFF_FIRE),
+    /* Ice magic     */ DMG_ENTRY(0, PUPPET_DMGEFF_ICE),
+    /* Light magic   */ DMG_ENTRY(3, PUPPET_DMGEFF_THUNDER),
+    /* Shield        */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
+    /* Mirror Ray    */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
+    /* Kokiri spin   */ DMG_ENTRY(1, PUPPET_DMGEFF_NONE),
+    /* Giant spin    */ DMG_ENTRY(4, PUPPET_DMGEFF_NONE),
+    /* Master spin   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Kokiri jump   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Giant jump    */ DMG_ENTRY(8, PUPPET_DMGEFF_NONE),
+    /* Master jump   */ DMG_ENTRY(4, PUPPET_DMGEFF_NONE),
+    /* Unknown 1     */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
+    /* Unblockable   */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
+    /* Hammer jump   */ DMG_ENTRY(4, PUPPET_DMGEFF_KNOCKBACK),
+    /* Unknown 2     */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
 };
 
 void LinkPuppet_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -117,18 +127,50 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->damageTimer--;
     }
 
-    if (this->packet.didDamage == 1 && GET_PLAYER(globalCtx)->invincibilityTimer <= 0) {
+    if (this->packet.didDamage > 0 && GET_PLAYER(globalCtx)->invincibilityTimer <= 0 &&
+        !Player_InBlockingCsMode(globalCtx, GET_PLAYER(globalCtx))) {
+
+        if (this->packet.didDamage == PUPPET_DMGEFF_NORMAL) {
+            Player_InflictDamage(globalCtx, -16);
+            func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
+            GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+        } else if (this->packet.didDamage == PUPPET_DMGEFF_ICE) {
+            GET_PLAYER(globalCtx)->stateFlags1 &= ~(PLAYER_STATE1_10 | PLAYER_STATE1_11);
+            func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 3, 0.0f, 0.0f, 0, 20);
+            GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+        } else if (this->packet.didDamage == PUPPET_DMGEFF_FIRE) {
+            for (int i = 0; i < 18; i++) {
+                GET_PLAYER(globalCtx)->flameTimers[i] = Rand_S16Offset(0, 200);
+            }
+            GET_PLAYER(globalCtx)->isBurning = true;
+            func_80837C0C(gGlobalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
+            GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+        } else if (this->packet.didDamage == PUPPET_DMGEFF_THUNDER) {
+            func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 4, 0.0f, 0.0f, 0, 20);
+            GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+        } else if (this->packet.didDamage == PUPPET_DMGEFF_KNOCKBACK) {
+            func_8002F71C(globalCtx, &this->actor, 100.0f * 0.04f + 4.0f, this->actor.world.rot.y, 8.0f);
+            GET_PLAYER(globalCtx)->invincibilityTimer = 28;
+        } else if (this->packet.didDamage == PUPPET_DMGEFF_STUN) {
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 40;
+            Actor_SetColorFilter(&GET_PLAYER(globalCtx)->actor, 0, 0xFF, 0, 40);
+        }
+
         this->packet.didDamage = 0;
-        Player_InflictDamage(globalCtx, -16);
-        func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
-        GET_PLAYER(globalCtx)->invincibilityTimer = 28;
     }
 
     if (this->collider.base.acFlags & AC_HIT && this->damageTimer <= 0) {
         this->collider.base.acFlags &= ~AC_HIT;
-        gPacket.didDamage = 1;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_CUTBODY);
-        this->damageTimer = 28;
+        gPacket.didDamage = this->actor.colChkInfo.damageEffect;
+
+        if (gPacket.didDamage == PUPPET_DMGEFF_NORMAL) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_CUTBODY);
+        } else if (gPacket.didDamage == PUPPET_DMGEFF_STUN) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
+            Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+        }
+
+        this->damageTimer = 18;
     }
 
     Collider_UpdateCylinder(thisx, &this->collider);
