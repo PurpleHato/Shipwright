@@ -189,6 +189,7 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.world.pos = this->packet.posRot.pos;
         this->actor.shape.rot = this->packet.posRot.rot;
     } else {
+        this->initialized = false;
         this->actor.world.pos.x = -32000.0f;
         this->actor.world.pos.y = -32000.0f;
         this->actor.world.pos.z = -32000.0f;

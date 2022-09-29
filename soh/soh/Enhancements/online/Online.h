@@ -30,7 +30,7 @@ typedef struct {
 
 typedef struct OnlinePacket {
     uint8_t player_id;
-    uint16_t rupeeAmountChanged;
+
     PosRotOnline posRot;
     uint8_t biggoron_broken;
     uint16_t scene_id;
