@@ -2157,6 +2157,10 @@ void func_8002F7A0(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f
 }
 
 void func_8002F7DC(Actor* actor, u16 sfxId) {
+    if (actor->id == ACTOR_PLAYER) {
+        gPacket.sound_id = sfxId;
+    }
+
     Audio_PlaySoundGeneral(sfxId, &actor->projectedPos, 4, &D_801333E0, &D_801333E0, &D_801333E8);
 }
 

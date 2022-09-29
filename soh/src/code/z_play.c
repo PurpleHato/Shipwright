@@ -1526,7 +1526,6 @@ void Gameplay_Main(GameState* thisx) {
         Gameplay_Update(globalCtx);
     }
 
-
     gPacket.posRot.pos = GET_PLAYER(gGlobalCtx)->actor.world.pos;
     gPacket.posRot.rot = GET_PLAYER(gGlobalCtx)->actor.shape.rot;
     memcpy(gPacket.jointTable, GET_PLAYER(gGlobalCtx)->skelAnime.jointTable, 6 * PLAYER_LIMB_MAX);

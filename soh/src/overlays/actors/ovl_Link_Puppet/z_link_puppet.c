@@ -59,16 +59,16 @@ typedef enum {
 
 static DamageTable sDamageTable[] = {
     /* Deku nut      */ DMG_ENTRY(0, PUPPET_DMGEFF_STUN),
-    /* Deku stick    */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
-    /* Slingshot     */ DMG_ENTRY(1, PUPPET_DMGEFF_NONE),
-    /* Explosive     */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
-    /* Boomerang     */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
-    /* Normal arrow  */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
+    /* Deku stick    */ DMG_ENTRY(2, PUPPET_DMGEFF_NORMAL),
+    /* Slingshot     */ DMG_ENTRY(1, PUPPET_DMGEFF_NORMAL),
+    /* Explosive     */ DMG_ENTRY(2, PUPPET_DMGEFF_NORMAL),
+    /* Boomerang     */ DMG_ENTRY(0, PUPPET_DMGEFF_STUN),
+    /* Normal arrow  */ DMG_ENTRY(2, PUPPET_DMGEFF_NORMAL),
     /* Hammer swing  */ DMG_ENTRY(2, PUPPET_DMGEFF_KNOCKBACK),
-    /* Hookshot      */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
-    /* Kokiri sword  */ DMG_ENTRY(1, PUPPET_DMGEFF_NONE),
-    /* Master sword  */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
-    /* Giant's Knife */ DMG_ENTRY(4, PUPPET_DMGEFF_NONE),
+    /* Hookshot      */ DMG_ENTRY(0, PUPPET_DMGEFF_STUN),
+    /* Kokiri sword  */ DMG_ENTRY(1, PUPPET_DMGEFF_NORMAL),
+    /* Master sword  */ DMG_ENTRY(2, PUPPET_DMGEFF_NORMAL),
+    /* Giant's Knife */ DMG_ENTRY(4, PUPPET_DMGEFF_NORMAL),
     /* Fire arrow    */ DMG_ENTRY(2, PUPPET_DMGEFF_FIRE),
     /* Ice arrow     */ DMG_ENTRY(2, PUPPET_DMGEFF_ICE),
     /* Light arrow   */ DMG_ENTRY(2, PUPPET_DMGEFF_THUNDER),
@@ -80,12 +80,12 @@ static DamageTable sDamageTable[] = {
     /* Light magic   */ DMG_ENTRY(3, PUPPET_DMGEFF_THUNDER),
     /* Shield        */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
     /* Mirror Ray    */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
-    /* Kokiri spin   */ DMG_ENTRY(1, PUPPET_DMGEFF_NONE),
-    /* Giant spin    */ DMG_ENTRY(4, PUPPET_DMGEFF_NONE),
-    /* Master spin   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
-    /* Kokiri jump   */ DMG_ENTRY(2, PUPPET_DMGEFF_NONE),
-    /* Giant jump    */ DMG_ENTRY(8, PUPPET_DMGEFF_NONE),
-    /* Master jump   */ DMG_ENTRY(4, PUPPET_DMGEFF_NONE),
+    /* Kokiri spin   */ DMG_ENTRY(1, PUPPET_DMGEFF_NORMAL),
+    /* Giant spin    */ DMG_ENTRY(4, PUPPET_DMGEFF_NORMAL),
+    /* Master spin   */ DMG_ENTRY(2, PUPPET_DMGEFF_NORMAL),
+    /* Kokiri jump   */ DMG_ENTRY(2, PUPPET_DMGEFF_NORMAL),
+    /* Giant jump    */ DMG_ENTRY(8, PUPPET_DMGEFF_NORMAL),
+    /* Master jump   */ DMG_ENTRY(4, PUPPET_DMGEFF_NORMAL),
     /* Unknown 1     */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
     /* Unblockable   */ DMG_ENTRY(0, PUPPET_DMGEFF_NONE),
     /* Hammer jump   */ DMG_ENTRY(4, PUPPET_DMGEFF_KNOCKBACK),
@@ -189,6 +189,11 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->packet.jointTable != NULL) {
         this->linkSkeleton.jointTable = this->packet.jointTable;
     }
+
+    if (this->packet.sound_id != 0) {
+        Audio_PlaySoundGeneral(this->packet.sound_id, &this->actor.projectedPos, 4, &D_801333E0, &D_801333E0, &D_801333E8);
+        this->packet.sound_id = 0;
+    }
 }
 
 Vec3f FEET_POS[] = {
@@ -239,11 +244,6 @@ void Puppet_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
 void LinkPuppet_Draw(Actor* thisx, GlobalContext* globalCtx) {
     LinkPuppet* this = (LinkPuppet*)thisx;
-
-    u8 sp12C[2];
-
-    sp12C[0] = 0;
-    sp12C[1] = 0;
 
     func_8008F470(globalCtx, this->linkSkeleton.skeleton, this->linkSkeleton.jointTable, this->linkSkeleton.dListCount,
                   0, this->packet.tunicType, this->packet.bootsType, this->packet.faceType, Puppet_OverrideLimbDraw, Puppet_PostLimbDraw, this);

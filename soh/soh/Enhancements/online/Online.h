@@ -34,9 +34,10 @@ typedef struct OnlinePacket {
     PosRotOnline posRot;
     uint8_t biggoron_broken;
     uint16_t scene_id;
+    uint16_t sound_id;
 
     // SkelAnime Data
-    Vec3short jointTable[0x16];
+    Vec3short jointTable[24];
 
     uint8_t sheathType;
     uint8_t shieldType;
