@@ -130,10 +130,12 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
             Player_InflictDamage(globalCtx, this->packet.damageValue * -4);
             func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 0;
         } else if (this->packet.damageEffect == PUPPET_DMGEFF_ICE) {
             GET_PLAYER(globalCtx)->stateFlags1 &= ~(PLAYER_STATE1_10 | PLAYER_STATE1_11);
             func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 3, 0.0f, 0.0f, 0, 20);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 0;
         } else if (this->packet.damageEffect == PUPPET_DMGEFF_FIRE) {
             for (int i = 0; i < 18; i++) {
                 GET_PLAYER(globalCtx)->flameTimers[i] = Rand_S16Offset(0, 200);
@@ -141,15 +143,18 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
             GET_PLAYER(globalCtx)->isBurning = true;
             func_80837C0C(gGlobalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 0;
         } else if (this->packet.damageEffect == PUPPET_DMGEFF_THUNDER) {
             func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 4, 0.0f, 0.0f, 0, 20);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 0;
         } else if (this->packet.damageEffect == PUPPET_DMGEFF_KNOCKBACK) {
             func_8002F71C(globalCtx, &this->actor, 100.0f * 0.04f + 4.0f, this->actor.world.rot.y, 8.0f);
             GET_PLAYER(globalCtx)->invincibilityTimer = 28;
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 0;
         } else if (this->packet.damageEffect == PUPPET_DMGEFF_STUN) {
-            GET_PLAYER(globalCtx)->actor.freezeTimer = 40;
-            Actor_SetColorFilter(&GET_PLAYER(globalCtx)->actor, 0, 0xFF, 0, 40);
+            GET_PLAYER(globalCtx)->actor.freezeTimer = 20;
+            Actor_SetColorFilter(&GET_PLAYER(globalCtx)->actor, 0, 0xFF, 0, 10);
         }
 
         this->packet.damageEffect = 0;
@@ -160,11 +165,11 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
         gPacket.damageValue = this->actor.colChkInfo.damage;
         gPacket.damageEffect = this->actor.colChkInfo.damageEffect;
 
-        if (gPacket.damageEffect == PUPPET_DMGEFF_NORMAL) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_CUTBODY);
-        } else if (gPacket.damageEffect == PUPPET_DMGEFF_STUN) {
+        if (gPacket.damageEffect == PUPPET_DMGEFF_STUN) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+        } else if (gPacket.damageEffect != PUPPET_DMGEFF_NONE) {
+            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 24);
         }
 
         this->damageTimer = 18;
