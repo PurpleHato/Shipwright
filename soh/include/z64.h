@@ -77,6 +77,7 @@ typedef struct OnlinePacket {
     uint8_t biggoron_broken;
     uint16_t scene_id;
     uint16_t sound_id;
+    uint8_t puppet_age;
 
     // SkelAnime Data
     Vec3s jointTable[24];
@@ -90,7 +91,8 @@ typedef struct OnlinePacket {
     uint8_t tunicType;
     uint8_t bootsType;
 
-    uint8_t didDamage;
+    uint8_t damageEffect;
+    uint8_t damageValue;
 } OnlinePacket;
 
 OnlinePacket gPacket;

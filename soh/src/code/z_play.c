@@ -1540,6 +1540,7 @@ void Gameplay_Main(GameState* thisx) {
     gPacket.bootsType = GET_PLAYER(gGlobalCtx)->currentBoots;
     gPacket.faceType = GET_PLAYER(gGlobalCtx)->actor.shape.face;
     gPacket.scene_id = gGlobalCtx->sceneNum;
+    gPacket.puppet_age = gSaveContext.linkAge;
 
     OTRSendPacket();
 

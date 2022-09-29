@@ -100,10 +100,6 @@ void LinkPuppet_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, 90.0f);
 
-    SkelAnime_InitLink(globalCtx, &this->linkSkeleton, gPlayerSkelHeaders[((void)0, gSaveContext.linkAge)],
-                       gPlayerAnim_link_normal_wait, 9, this->linkSkeleton.jointTable, this->linkSkeleton.morphTable,
-                       PLAYER_LIMB_MAX);
-
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -127,45 +123,46 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->damageTimer--;
     }
 
-    if (this->packet.didDamage > 0 && GET_PLAYER(globalCtx)->invincibilityTimer <= 0 &&
+    if (this->packet.damageEffect > 0 && GET_PLAYER(globalCtx)->invincibilityTimer <= 0 &&
         !Player_InBlockingCsMode(globalCtx, GET_PLAYER(globalCtx))) {
 
-        if (this->packet.didDamage == PUPPET_DMGEFF_NORMAL) {
-            Player_InflictDamage(globalCtx, -16);
+        if (this->packet.damageEffect == PUPPET_DMGEFF_NORMAL) {
+            Player_InflictDamage(globalCtx, this->packet.damageValue * -4);
             func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
-        } else if (this->packet.didDamage == PUPPET_DMGEFF_ICE) {
+        } else if (this->packet.damageEffect == PUPPET_DMGEFF_ICE) {
             GET_PLAYER(globalCtx)->stateFlags1 &= ~(PLAYER_STATE1_10 | PLAYER_STATE1_11);
             func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 3, 0.0f, 0.0f, 0, 20);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
-        } else if (this->packet.didDamage == PUPPET_DMGEFF_FIRE) {
+        } else if (this->packet.damageEffect == PUPPET_DMGEFF_FIRE) {
             for (int i = 0; i < 18; i++) {
                 GET_PLAYER(globalCtx)->flameTimers[i] = Rand_S16Offset(0, 200);
             }
             GET_PLAYER(globalCtx)->isBurning = true;
             func_80837C0C(gGlobalCtx, GET_PLAYER(globalCtx), 0, 0, 0, 0, 0);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
-        } else if (this->packet.didDamage == PUPPET_DMGEFF_THUNDER) {
+        } else if (this->packet.damageEffect == PUPPET_DMGEFF_THUNDER) {
             func_80837C0C(globalCtx, GET_PLAYER(globalCtx), 4, 0.0f, 0.0f, 0, 20);
             GET_PLAYER(globalCtx)->invincibilityTimer = 18;
-        } else if (this->packet.didDamage == PUPPET_DMGEFF_KNOCKBACK) {
+        } else if (this->packet.damageEffect == PUPPET_DMGEFF_KNOCKBACK) {
             func_8002F71C(globalCtx, &this->actor, 100.0f * 0.04f + 4.0f, this->actor.world.rot.y, 8.0f);
             GET_PLAYER(globalCtx)->invincibilityTimer = 28;
-        } else if (this->packet.didDamage == PUPPET_DMGEFF_STUN) {
+        } else if (this->packet.damageEffect == PUPPET_DMGEFF_STUN) {
             GET_PLAYER(globalCtx)->actor.freezeTimer = 40;
             Actor_SetColorFilter(&GET_PLAYER(globalCtx)->actor, 0, 0xFF, 0, 40);
         }
 
-        this->packet.didDamage = 0;
+        this->packet.damageEffect = 0;
     }
 
     if (this->collider.base.acFlags & AC_HIT && this->damageTimer <= 0) {
         this->collider.base.acFlags &= ~AC_HIT;
-        gPacket.didDamage = this->actor.colChkInfo.damageEffect;
+        gPacket.damageValue = this->actor.colChkInfo.damage;
+        gPacket.damageEffect = this->actor.colChkInfo.damageEffect;
 
-        if (gPacket.didDamage == PUPPET_DMGEFF_NORMAL) {
+        if (gPacket.damageEffect == PUPPET_DMGEFF_NORMAL) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_CUTBODY);
-        } else if (gPacket.didDamage == PUPPET_DMGEFF_STUN) {
+        } else if (gPacket.damageEffect == PUPPET_DMGEFF_STUN) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOMA_JR_FREEZE);
             Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
         }
@@ -178,6 +175,12 @@ void LinkPuppet_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if (globalCtx->sceneNum == this->packet.scene_id) {
+        if (this->initialized == false) {
+            SkelAnime_InitLink(globalCtx, &this->linkSkeleton, gPlayerSkelHeaders[((void)0, this->packet.puppet_age)],
+                               gPlayerAnim_link_normal_wait, 9, this->linkSkeleton.jointTable,
+                               this->linkSkeleton.morphTable, PLAYER_LIMB_MAX);
+            this->initialized = true;
+        }
         this->actor.world.pos = this->packet.posRot.pos;
         this->actor.shape.rot = this->packet.posRot.rot;
     } else {
@@ -207,9 +210,20 @@ extern Gfx* D_80125D28[];
 s32 Puppet_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     LinkPuppet* this = (LinkPuppet*)thisx;
 
-    if (limbIndex == PLAYER_LIMB_SHEATH) {
+     if (limbIndex == PLAYER_LIMB_ROOT) {
+        if (this->packet.puppet_age == 1) {
+            if (!(this->linkSkeleton.moveFlags & 4) || (this->linkSkeleton.moveFlags & 1)) {
+                pos->x *= 0.64f;
+                pos->z *= 0.64f;
+            }
 
-        Gfx** dLists = &sPlayerDListGroups[this->packet.sheathType][(void)0, gSaveContext.linkAge];
+            if (!(this->linkSkeleton.moveFlags & 4) || (this->linkSkeleton.moveFlags & 2)) {
+                pos->y *= 0.64f;
+            }
+        }
+    } else if (limbIndex == PLAYER_LIMB_SHEATH) {
+
+        Gfx** dLists = &sPlayerDListGroups[this->packet.sheathType][(void)0, this->packet.puppet_age];
         if ((this->packet.sheathType == 18) || (this->packet.sheathType == 19)) {
             dLists += this->packet.shieldType * 4;
         }
@@ -217,7 +231,7 @@ s32 Puppet_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
     } else if (limbIndex == PLAYER_LIMB_L_HAND) {
 
-        Gfx** dLists = &sPlayerDListGroups[this->packet.leftHandType][(void)0, gSaveContext.linkAge];
+        Gfx** dLists = &sPlayerDListGroups[this->packet.leftHandType][(void)0, this->packet.puppet_age];
         if ((this->packet.leftHandType == 4) && this->packet.biggoron_broken) {
             dLists += 4;
         }
@@ -225,7 +239,7 @@ s32 Puppet_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
     } else if (limbIndex == PLAYER_LIMB_R_HAND) {
 
-        Gfx** dLists = &sPlayerDListGroups[this->packet.rightHandType][(void)0, gSaveContext.linkAge];
+        Gfx** dLists = &sPlayerDListGroups[this->packet.rightHandType][(void)0, this->packet.puppet_age];
         if (this->packet.rightHandType == 10) {
             dLists += this->packet.shieldType * 4;
         }
@@ -238,13 +252,16 @@ s32 Puppet_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 void Puppet_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     LinkPuppet* this = (LinkPuppet*)thisx;
 
-    Vec3f* vec = &FEET_POS[((void)0, gSaveContext.linkAge)];
+    Vec3f* vec = &FEET_POS[((void)0, this->packet.puppet_age)];
     Actor_SetFeetPos(&this->actor, limbIndex, PLAYER_LIMB_L_FOOT, vec, PLAYER_LIMB_R_FOOT, vec);
 }
 
 void LinkPuppet_Draw(Actor* thisx, GlobalContext* globalCtx) {
     LinkPuppet* this = (LinkPuppet*)thisx;
 
-    func_8008F470(globalCtx, this->linkSkeleton.skeleton, this->linkSkeleton.jointTable, this->linkSkeleton.dListCount,
-                  0, this->packet.tunicType, this->packet.bootsType, this->packet.faceType, Puppet_OverrideLimbDraw, Puppet_PostLimbDraw, this);
+    if (this->initialized) {
+        func_8008F470(globalCtx, this->linkSkeleton.skeleton, this->linkSkeleton.jointTable,
+                      this->linkSkeleton.dListCount, 0, this->packet.tunicType, this->packet.bootsType,
+                      this->packet.faceType, Puppet_OverrideLimbDraw, Puppet_PostLimbDraw, this);
+    }
 }

@@ -11,4 +11,5 @@ typedef struct LinkPuppet {
     ColliderQuad swordQuads[2];
     ColliderQuad shieldQuad;
     uint8_t damageTimer;
+    uint8_t initialized;
 } LinkPuppet;
