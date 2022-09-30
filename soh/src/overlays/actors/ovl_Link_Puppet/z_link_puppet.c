@@ -98,6 +98,8 @@ void LinkPuppet_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.room = -1;
     this->actor.targetMode = 1;
 
+    this->packet.scene_id = -1;
+
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, 90.0f);
 
     Collider_InitCylinder(globalCtx, &this->collider);
