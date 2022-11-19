@@ -2632,6 +2632,7 @@ void FileChoose_Init(GameState* thisx) {
     fileSelectSpoilerFileLoaded = false;
     isFastFileIdIncompatible = 0;
     CVar_SetS32("gOnFileSelectNameEntry", 0);
+    CVar_SetS32("gMirroredWorld", 0);
 
     SREG(30) = 1;
     osSyncPrintf("SIZE=%x\n", size);

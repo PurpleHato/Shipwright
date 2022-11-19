@@ -1486,8 +1486,9 @@ s32 Camera_Free(Camera* camera) {
 
     f32 newCamX = -D_8015BD7C->state.input[0].cur.right_stick_x * 10.0f * (CVar_GetFloat("gCameraSensitivity", 1.0f));
     f32 newCamY = D_8015BD7C->state.input[0].cur.right_stick_y * 10.0f * (CVar_GetFloat("gCameraSensitivity", 1.0f));
+    bool invertXAxis = (CVar_GetS32("gInvertXAxis", 0) && !CVar_GetS32("gMirroredWorld", 0)) || (!CVar_GetS32("gInvertXAxis", 0) && CVar_GetS32("gMirroredWorld", 0));
 
-    camera->play->camX += newCamX * (CVar_GetS32("gInvertXAxis", 0) ? -1 : 1);
+    camera->play->camX += newCamX * (invertXAxis ? -1 : 1);
     camera->play->camY += newCamY * (CVar_GetS32("gInvertYAxis", 1) ? 1 : -1);
 
     if (camera->play->camY > 0x32A4) {

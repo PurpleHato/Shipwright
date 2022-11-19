@@ -284,6 +284,7 @@ void Title_Destroy(GameState* thisx) {
 void Title_Init(GameState* thisx) {
     //u32 size = 0;
     TitleContext* this = (TitleContext*)thisx;
+    CVar_SetS32("gMirroredWorld", 0);
 
     quote = SetQuote();
 
