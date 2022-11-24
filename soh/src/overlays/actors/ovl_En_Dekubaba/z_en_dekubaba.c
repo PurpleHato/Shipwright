@@ -388,9 +388,13 @@ void EnDekubaba_SetupHit(EnDekubaba* this, s32 arg1) {
     Actor_SetScale(&this->actor, this->size * 0.01f);
 
     if (arg1 == 2) {
-        Actor_SetColorFilter(&this->actor, 0, 155, 0, 62);
+        if (!CVar_GetS32("gPhotosensitiveMode", 0)) {
+            Actor_SetColorFilter(&this->actor, 0, 155, 0, 62);
+        }
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 42);
+        if (!CVar_GetS32("gPhotosensitiveMode", 0)) {
+            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 42);
+        }
     }
 
     this->actionFunc = EnDekubaba_Hit;

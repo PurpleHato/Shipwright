@@ -454,7 +454,12 @@ s32 EnSt_CheckHitBackside(EnSt* this, PlayState* play) {
     this->gaveDamageSpinTimer = 1;
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENST_ANIM_3);
     this->takeDamageSpinTimer = this->skelAnime.animLength;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xC8, 0, this->takeDamageSpinTimer);
+    if (CVar_GetS32("gPhotosensitiveMode", 0)) {
+        Actor_SetColorFilter(&this->actor, 0, 0, 0, this->takeDamageSpinTimer);
+    } else {
+        Actor_SetColorFilter(&this->actor, 0x4000, 0xC8, 0, this->takeDamageSpinTimer);
+    }
+    
     if (Actor_ApplyDamage(&this->actor)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTU_DAMAGE);
         return false;
