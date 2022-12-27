@@ -54,6 +54,12 @@ enum SeqPlayers {
     /* 4 */ SEQ_MAX
 };
 
+const char* capeTypes[3] = {
+    "None",
+    "Cape", 
+    "Scarf",
+};
+
 namespace GameMenuBar {
 
     // MARK: - Properties
@@ -1007,6 +1013,14 @@ namespace GameMenuBar {
             }
             ImGui::PopStyleVar(3);
             ImGui::PopStyleColor(1);
+
+			UIWidgets::PaddedSeparator(true, true, 2.0f, 2.0f);
+            ImGui::Text("Link's Cape");
+            UIWidgets::EnhancementCombobox("gLinkCape", capeTypes, 3, 0);
+            UIWidgets::Tooltip("Gives Link Ganondorf's cape\nTime to get some drip");
+            if (CVar_GetS32("gLinkCape", 0) != 0) {
+                UIWidgets::EnhancementSliderFloat("Cape Length: %d", "##Cape_Length", "gLinkCapeLength", 0.0f, 9.5f, "", 3.5f, true);
+            }
 
          #ifdef __SWITCH__
             UIWidgets::Spacer(0);
