@@ -177,8 +177,8 @@ void EnGanonMant_UpdateStrand(PlayState* play, EnGanonMant* this, Vec3f* root, V
 
     delta.y = 0;
 
-    if (CVar_GetS32("gLinkCape", 0) != 0) {
-        jointLength = CVar_GetFloat("gLinkCapeLength", 3.5f);
+    if (CVarGetInteger("gLinkCape", 0) != 0) {
+        jointLength = CVarGetFloat("gLinkCapeLength", 3.5f);
     }
 
     if (this->actor.params == 0x23) {
