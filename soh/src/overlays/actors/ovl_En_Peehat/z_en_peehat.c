@@ -798,7 +798,7 @@ void EnPeehat_Adult_SetStateDie(EnPeehat* this) {
     this->bladeRotVel = 0;
     this->isStateDieFirstUpdate = 1;
     this->actor.speedXZ = 0.0f;
-    if (!CVar_GetS32("gPhotosensitiveMode", 0)) {
+    if (!CVarGetInteger("gPhotosensitiveMode", 0)) {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
     }
     this->state = PEAHAT_STATE_DYING;
@@ -906,7 +906,7 @@ void EnPeehat_Adult_CollisionCheck(EnPeehat* this, PlayState* play) {
             return;
         } else {
             Actor_ApplyDamage(&this->actor);
-            if (!CVar_GetS32("gPhotosensitiveMode", 0)) {
+            if (!CVarGetInteger("gPhotosensitiveMode", 0)) {
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             }
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
@@ -921,7 +921,7 @@ void EnPeehat_Adult_CollisionCheck(EnPeehat* this, PlayState* play) {
                 pos.z = Rand_CenteredFloat(20.0f) + this->actor.world.pos.z;
                 EffectSsEnFire_SpawnVec3f(play, &this->actor, &pos, 70, 0, 0, -1);
             }
-            if (!CVar_GetS32("gPhotosensitiveMode", 0)) {
+            if (!CVarGetInteger("gPhotosensitiveMode", 0)) {
                 Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, 100);
             }
         }
