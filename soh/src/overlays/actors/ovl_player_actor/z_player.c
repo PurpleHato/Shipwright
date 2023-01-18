@@ -11120,16 +11120,16 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
 
     sLinkCape->backPush = -9.0f;
     sLinkCape->backSwayMagnitude = 0.0f;
-    sLinkCape->sideSwayMagnitude = CVar_GetFloat("gLinkCapesideSwayMagnitude", 0.0f);
-    sLinkCape->minDist = CVar_GetFloat("gLinkCapeWidth", 10.0f);
-    sLinkCape->gravity = CVar_GetFloat("gLinkCapeGravity", -2.5f);
+    sLinkCape->sideSwayMagnitude = CVarGetFloat("gLinkCapesideSwayMagnitude", 0.0f);
+    sLinkCape->minDist = CVarGetFloat("gLinkCapeWidth", 10.0f);
+    sLinkCape->gravity = CVarGetFloat("gLinkCapeGravity", -2.5f);
 
     sLinkCape->actor.world.pos = this->actor.world.pos;
 
-    if (CVar_GetS32("gLinkCape", 0) == 1) {
+    if (CVarGetInteger("gLinkCape", 0) == 1) {
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_L_SHOULDER];
-    } else if (CVar_GetS32("gLinkCape", 0) == 2) {
+    } else if (CVarGetInteger("gLinkCape", 0) == 2) {
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_HEAD];
     }
