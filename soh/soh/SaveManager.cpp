@@ -176,6 +176,9 @@ void SaveManager::LoadRandomizerVersion2() {
     std::string ganonText;
     SaveManager::Instance->LoadData("ganonText", ganonText);
     memcpy(gSaveContext.ganonText, ganonText.c_str(), ganonText.length());
+    std::string dampeText;
+    SaveManager::Instance->LoadData("dampeText", dampeText);
+    memcpy(gSaveContext.dampeText, dampeText.c_str(), dampeText.length());
     std::string warpMinuetText;
     SaveManager::Instance->LoadData("warpMinuetText", warpMinuetText);
     memcpy(gSaveContext.warpMinuetText, warpMinuetText.c_str(), warpMinuetText.length());
@@ -265,6 +268,7 @@ void SaveManager::SaveRandomizer() {
     SaveManager::Instance->SaveData("adultAltarText", gSaveContext.adultAltarText);
     SaveManager::Instance->SaveData("ganonHintText", gSaveContext.ganonHintText);
     SaveManager::Instance->SaveData("ganonText", gSaveContext.ganonText);
+    SaveManager::Instance->SaveData("dampeText", gSaveContext.dampeText);
     SaveManager::Instance->SaveData("warpMinuetText", gSaveContext.warpMinuetText);
     SaveManager::Instance->SaveData("warpBoleroText", gSaveContext.warpBoleroText);
     SaveManager::Instance->SaveData("warpSerenadeText", gSaveContext.warpSerenadeText);
@@ -1330,6 +1334,7 @@ void SaveManager::LoadBaseVersion3() {
         SaveManager::Instance->LoadData("", gSaveContext.randomizerInf[i]);
     });
     SaveManager::Instance->LoadData("isMasterQuest", gSaveContext.isMasterQuest);
+    SaveManager::Instance->LoadData("dogParams", gSaveContext.dogParams);
 }
 
 void SaveManager::SaveBase() {
@@ -1505,6 +1510,7 @@ void SaveManager::SaveBase() {
         SaveManager::Instance->SaveData("", gSaveContext.randomizerInf[i]);
     });
     SaveManager::Instance->SaveData("isMasterQuest", gSaveContext.isMasterQuest);
+    SaveManager::Instance->SaveData("dogParams", gSaveContext.dogParams);
 }
 
 void SaveManager::SaveArray(const std::string& name, const size_t size, SaveArrayFunc func) {
