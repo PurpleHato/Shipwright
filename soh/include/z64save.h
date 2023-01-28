@@ -253,6 +253,7 @@ typedef struct {
     /*        */ u8 pendingIceTrapCount;
     /*        */ SohStats sohStats;
     /*        */ u8 temporaryWeapon;
+    /*        */ FaroresWindData backupFW;
     // #endregion
     // #region SOH [Randomizer]
     // Upstream TODO: Move these to their own struct or name to more obviously specific to Randomizer
@@ -390,9 +391,9 @@ typedef enum {
 #define EVENTCHKINF_40_INDEX 4
 #define EVENTCHKINF_40_SHIFT 0
 #define EVENTCHKINF_40_MASK (1 << EVENTCHKINF_40_SHIFT)
-#define EVENTCHKINF_40 ((EVENTCHKINF_40_INDEX << 4) | EVENTCHKINF_40_SHIFT)
+#define EVENTCHKINF_OBTAINED_ZELDAS_LETTER ((EVENTCHKINF_40_INDEX << 4) | EVENTCHKINF_40_SHIFT)
 
-#define EVENTCHKINF_OBTAINED_ZELDAS_LETTER 0x41
+#define EVENTCHKINF_41 0x41
 #define EVENTCHKINF_42 0x42
 #define EVENTCHKINF_43 0x43
 #define EVENTCHKINF_45 0x45
