@@ -157,6 +157,7 @@ const std::vector<const char*> enhancementsCvars = {
     "gHoverFishing",
     "gN64WeirdFrames",
     "gBombchusOOB",
+    "gQuickPutaway",
     "gGsCutscene",
     "gSkipSaveConfirmation",
     "gAutosave",
@@ -235,6 +236,8 @@ const std::vector<const char*> randomizerCvars = {
     "gRandomizeRewardCount",
     "gRandomizeScrubText",
     "gRandomizeShopsanity",
+    "gRandomizeShopsanityPrices",
+    "gRandomizeShopsanityPricesAffordable",
     "gRandomizeShuffleAdultTrade",
     "gRandomizeShuffleBeans",
     "gRandomizeShuffleBossEntrances",
@@ -359,6 +362,8 @@ const std::vector<PresetEntry> vanillaPlusPresetEntries = {
     PRESET_ENTRY_S32("gN64WeirdFrames", 1),
     // Bombchus out of bounds
     PRESET_ENTRY_S32("gBombchusOOB", 1),
+    // Quick Putaway
+    PRESET_ENTRY_S32("gQuickPutaway", 1),
     // Skip save confirmation
     PRESET_ENTRY_S32("gSkipSaveConfirmation", 1),
 };
@@ -424,6 +429,8 @@ const std::vector<PresetEntry> enhancedPresetEntries = {
     PRESET_ENTRY_S32("gN64WeirdFrames", 1),
     // Bombchus out of bounds
     PRESET_ENTRY_S32("gBombchusOOB", 1),
+    // Quick Putaway
+    PRESET_ENTRY_S32("gQuickPutaway", 1),
     // Skip save confirmation
     PRESET_ENTRY_S32("gSkipSaveConfirmation", 1),
     // Biggoron Forge Time (0 to 3)
@@ -538,6 +545,8 @@ const std::vector<PresetEntry> randomizerPresetEntries = {
     PRESET_ENTRY_S32("gN64WeirdFrames", 1),
     // Bombchus out of bounds
     PRESET_ENTRY_S32("gBombchusOOB", 1),
+    // Quick Putaway
+    PRESET_ENTRY_S32("gQuickPutaway", 1),
     // Skip save confirmation
     PRESET_ENTRY_S32("gSkipSaveConfirmation", 1),
     // Biggoron Forge Time (0 to 3)
@@ -572,6 +581,8 @@ const std::vector<PresetEntry> randomizerPresetEntries = {
     PRESET_ENTRY_S32("gDampeWin", 1),
     // Skip Magic Arrow Equip Animation
     PRESET_ENTRY_S32("gSkipArrowAnimation", 1),
+    // Exit Market at Night
+    PRESET_ENTRY_S32("gMarketSneak", 1),
 
     // Equip arrows on multiple slots
     PRESET_ENTRY_S32("gSeparateArrows", 1),
@@ -592,8 +603,6 @@ const std::vector<PresetEntry> randomizerPresetEntries = {
 
     // Autosave
     PRESET_ENTRY_S32("gAutosave", 1),
-    // Allow the cursor to be on any slot
-    PRESET_ENTRY_S32("gPauseAnyCursor", 1),
 
     // Customize Fishing Behaviour
     PRESET_ENTRY_S32("gCustomizeFishing", 1),
@@ -683,6 +692,7 @@ const std::vector<PresetEntry> hellModePresetEntries = {
     PRESET_ENTRY_S32("gRandomizeMqDungeons", RO_MQ_DUNGEONS_RANDOM_NUMBER),
     PRESET_ENTRY_S32("gRandomizeRainbowBridge", RO_BRIDGE_DUNGEON_REWARDS),
     PRESET_ENTRY_S32("gRandomizeShopsanity", RO_SHOPSANITY_FOUR_ITEMS),
+    PRESET_ENTRY_S32("gRandomizeShopsanityPrices", RO_SHOPSANITY_PRICE_TYCOON),
     PRESET_ENTRY_S32("gRandomizeShuffleAdultTrade", 1),
     PRESET_ENTRY_S32("gRandomizeShuffleBeans", 1),
     PRESET_ENTRY_S32("gRandomizeShuffleCows", 1),
