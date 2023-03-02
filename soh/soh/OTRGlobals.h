@@ -29,6 +29,7 @@ public:
 
     bool HasMasterQuest();
     bool HasOriginal();
+    uint32_t GetInterpolationFPS();
     std::shared_ptr<std::vector<std::string>> ListFiles(std::string path);
 
 private:
@@ -60,6 +61,7 @@ uint32_t ResourceMgr_GetNumGameVersions();
 uint32_t ResourceMgr_GetGameVersion(int index);
 void ResourceMgr_CacheDirectory(const char* resName);
 char** ResourceMgr_ListFiles(const char* searchMask, int* resultSize);
+char* GetResourceDataByNameHandlingMQ(const char* path);
 void ResourceMgr_LoadFile(const char* resName);
 char* ResourceMgr_LoadFileFromDisk(const char* filePath);
 char* ResourceMgr_LoadJPEG(char* data, int dataSize);
@@ -97,7 +99,6 @@ float OTRGetDimensionFromLeftEdge(float v);
 float OTRGetDimensionFromRightEdge(float v);
 int16_t OTRGetRectDimensionFromLeftEdge(float v);
 int16_t OTRGetRectDimensionFromRightEdge(float v);
-char* ResourceMgr_LoadFileRaw(const char* resName);
 bool AudioPlayer_Init(void);
 int AudioPlayer_Buffered(void);
 int AudioPlayer_GetDesiredBuffered(void);
