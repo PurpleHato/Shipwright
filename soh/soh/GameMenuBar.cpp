@@ -54,12 +54,6 @@ enum SeqPlayers {
     /* 4 */ SEQ_MAX
 };
 
-const char* capeTypes[3] = {
-    "None",
-    "Cape", 
-    "Scarf",
-};
-
 namespace GameMenuBar {
 
     // MARK: - Properties
@@ -91,6 +85,7 @@ namespace GameMenuBar {
         "8 Hearts",
         "OHKO"
     };
+    static const char* capeTypes[3] = { "None", "Cape", "Scarf" };
 
     // MARK: - Helpers
 
@@ -969,8 +964,6 @@ namespace GameMenuBar {
                 ImGui::EndMenu();
             }
 
-            UIWidgets::PaddedSeparator(false, true);
-
             // Autosave enum value of 1 is the default in presets and the old checkbox "on" state for backwards compatibility
             UIWidgets::PaddedText("Autosave", false, true);
             UIWidgets::EnhancementCombobox("gAutosave", autosaveLabels, 0);
@@ -1011,18 +1004,19 @@ namespace GameMenuBar {
                 LUS::RequestCvarSaveOnNextTick();
                 LUS::EnableWindow("Gameplay Stats", CVarGetInteger("gGameplayStatsEnabled", 0));
             }
+
             ImGui::PopStyleVar(3);
             ImGui::PopStyleColor(1);
 
-			UIWidgets::PaddedSeparator(true, true, 2.0f, 2.0f);
-            ImGui::Text("Link's Cape");
-            UIWidgets::EnhancementCombobox("gLinkCape", capeTypes, 3, 0);
+            UIWidgets::PaddedSeparator(true, true, 2.0f, 2.0f);
+            UIWidgets::PaddedText("Link's Cape", true, false);
+            UIWidgets::EnhancementCombobox("gLinkCape", capeTypes, 0);
             UIWidgets::Tooltip("Gives Link Ganondorf's cape\nTime to get some drip");
             if (CVarGetInteger("gLinkCape", 0) != 0) {
-                UIWidgets::EnhancementSliderFloat("Cape Length: %d", "##Cape_Length", "gLinkCapeLength", 0.5f, 9.5f, "", 3.5f, true);
-                UIWidgets::EnhancementSliderFloat("Cape Shoulders Width: %d", "##Cape_Width", "gLinkCapeWidth", 1.0f, 20.0f, "", 10.0f, true);
-                UIWidgets::EnhancementSliderFloat("Cape Side Sway Magnitude: %d", "##Cape_sideSwayMagnitude", "gLinkCapesideSwayMagnitude", -20.0f, 0.0f, "", 0.0f, true);
-                UIWidgets::EnhancementSliderFloat("Cape Gravity: %d", "##Cape_Gravity", "gLinkCapeGravity", -15.0f, -0.5f, "", -2.5f, true);
+                UIWidgets::PaddedEnhancementSliderFloat("Cape Length: %d", "##Cape_Length", "gLinkCapeLength", 0.5f, 9.5f, "", 3.5f, true, true, false, true);
+                UIWidgets::PaddedEnhancementSliderFloat("Cape Shoulders Width: %d", "##Cape_Width", "gLinkCapeWidth", 1.0f, 20.0f, "", 10.0f, true, true, false, true);
+                UIWidgets::PaddedEnhancementSliderFloat("Cape Side Sway Magnitude: %d", "##Cape_sideSwayMagnitude", "gLinkCapesideSwayMagnitude", -20.0f, 0.0f, "", 0.0f, true, true, false, true);
+                UIWidgets::PaddedEnhancementSliderFloat("Cape Gravity: %d", "##Cape_Gravity", "gLinkCapeGravity", -15.0f, -0.5f, "", -2.5f, true, true, false, true);
             }
 
          #ifdef __SWITCH__
