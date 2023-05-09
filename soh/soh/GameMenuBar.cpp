@@ -54,6 +54,12 @@ enum SeqPlayers {
     /* 4 */ SEQ_MAX
 };
 
+const char* capeTypes[3] = {
+    "None",
+    "Cape", 
+    "Scarf",
+};
+
 namespace GameMenuBar {
 
     // MARK: - Properties
