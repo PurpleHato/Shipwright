@@ -263,10 +263,7 @@ std::string ResolveSceneID(int sceneID, int roomID){
 
 void DrawStatsTracker(bool& open) {
     if (!open) {
-        if (CVarGetInteger("gGameplayStatsEnabled", 0)) {
-            CVarClear("gGameplayStatsEnabled");
-            LUS::RequestCvarSaveOnNextTick();
-        }
+        CVarSetInteger("gGameplayStatsEnabled", 0);
         return;
     }
 
@@ -670,7 +667,8 @@ void SetupDisplayColors() {
 }
 
 extern "C" void InitStatTracker() {
-    LUS::AddWindow("Enhancements", "Gameplay Stats", DrawStatsTracker, CVarGetInteger("gGameplayStatsEnabled", 0));
+    LUS::AddWindow("Enhancements", "Gameplay Stats", DrawStatsTracker,
+                    CVarGetInteger("gGameplayStatsEnabled", 0) == 1);
     SetupDisplayNames();
     SetupDisplayColors();
 }

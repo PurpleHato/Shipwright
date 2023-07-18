@@ -40,10 +40,7 @@ std::map<int, std::string> cmdMap = {
 
 void DrawDLViewer(bool& open) {
     if (!open) {
-        if (CVarGetInteger("gDLViewerEnabled", 0)) {
-            CVarClear("gDLViewerEnabled");
-            LUS::RequestCvarSaveOnNextTick();
-        }
+        CVarSetInteger("gDLViewerEnabled", 0);
         return;
     }
 
@@ -141,7 +138,7 @@ void DrawDLViewer(bool& open) {
 }
 
 void InitDLViewer() {
-    LUS::AddWindow("Developer Tools", "Display List Viewer", DrawDLViewer, CVarGetInteger("gDLViewerEnabled", 0));
+    LUS::AddWindow("Developer Tools", "Display List Viewer", DrawDLViewer);
 
     displayListsSearchResults = ResourceMgr_ListFiles("*DL", &displayListsSearchResultsCount);
 }

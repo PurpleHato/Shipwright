@@ -308,10 +308,7 @@ void DrawTypeChip(SeqType type) {
 
 void DrawSfxEditor(bool& open) {
     if (!open) {
-        if (CVarGetInteger("gAudioEditor.WindowOpen", 0)) {
-            CVarClear("gAudioEditor.WindowOpen");
-            LUS::RequestCvarSaveOnNextTick();
-        }
+        CVarSetInteger("gAudioEditor.WindowOpen", 0);
         return;
     }
 
@@ -555,7 +552,7 @@ void DrawSfxEditor(bool& open) {
 
 void InitAudioEditor() {
     //Draw the bar in the menu.
-    LUS::AddWindow("Enhancements", "Audio Editor", DrawSfxEditor, CVarGetInteger("gAudioEditor.WindowOpen", 0));
+    LUS::AddWindow("Enhancements", "Audio Editor", DrawSfxEditor);
 }
 
 std::vector<SeqType> allTypes = { SEQ_BGM_WORLD, SEQ_BGM_EVENT, SEQ_BGM_BATTLE, SEQ_OCARINA, SEQ_FANFARE, SEQ_INSTRUMENT, SEQ_SFX };

@@ -298,7 +298,6 @@ namespace Logic {
   bool HasAllStones          = false;
   bool HasAllMedallions      = false;
   bool CanBuildRainbowBridge = false;
-  bool BuiltRainbowBridge    = false;
   bool CanTriggerLACS        = false;
 
   //Other
@@ -1172,7 +1171,6 @@ namespace Logic {
      HasAllStones          = false;
      HasAllMedallions      = false;
      CanBuildRainbowBridge = false;
-     BuiltRainbowBridge    = false;
      CanTriggerLACS        = false;
 
      //Other
