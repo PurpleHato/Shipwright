@@ -25,6 +25,7 @@
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 #include "soh/Enhancements/randomizer/randomizer_entrance.h"
 #include <overlays/actors/ovl_En_Partner/z_en_partner.h>
+#include <overlays/actors/ovl_En_Ganon_Mant/z_en_ganon_mant.h>
 
 typedef enum {
     /* 0x00 */ KNOB_ANIM_ADULT_L,
@@ -9628,6 +9629,7 @@ static void (*D_80854738[])(PlayState* play, Player* this) = {
 };
 
 static Vec3f D_80854778 = { 0.0f, 50.0f, 0.0f };
+EnGanonMant* sLinkCape;
 
 void Player_Init(Actor* thisx, PlayState* play2) {
     Player* this = (Player*)thisx;
@@ -9763,6 +9765,8 @@ void Player_Init(Actor* thisx, PlayState* play2) {
 
     Map_SavePlayerInitialInfo(play);
     MREG(64) = 0;
+
+    sLinkCape = (EnGanonMant*)Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_GANON_MANT, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1);
 }
 
 void func_808471F4(s16* pValue) {
@@ -11192,6 +11196,27 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
             gSPDisplayList(POLY_XLU_DISP++, gHoverBootsCircleDL);
         }
     }
+
+    sLinkCape->backPush = -9.0f;
+    sLinkCape->backSwayMagnitude = 0.0f;
+    sLinkCape->sideSwayMagnitude = CVarGetFloat("gLinkCapesideSwayMagnitude", 0.0f);
+    sLinkCape->minDist = CVarGetFloat("gLinkCapeWidth", 10.0f);
+    sLinkCape->gravity = CVarGetFloat("gLinkCapeGravity", -2.5f);
+
+    sLinkCape->actor.world.pos = this->actor.world.pos;
+
+    if (CVarGetInteger("gLinkCape", 0) == 1) {
+        sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
+        sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_L_SHOULDER];
+    } else if (CVarGetInteger("gLinkCape", 0) == 2) {
+        sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
+        sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_HEAD];
+    }
+    
+    sLinkCape->rightForearmPos.y += 2;
+    sLinkCape->leftForearmPos.y += 2;
+
+    sLinkCape->minY = this->actor.world.pos.y - 0.1f;
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
