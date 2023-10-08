@@ -54,7 +54,8 @@ std::set<std::map<RandomizerCheck, RandomizerCheckTrackerData>> checkTrackerStat
 u8 generated;
 char* seedString;
 
-const std::string Randomizer::getItemMessageTableID = "Randomizer";
+const std::string Randomizer::vanillaTableGetItemMessageTableID = "RandomizerTableGetItem";
+const std::string Randomizer::randomizerTableGetItemMessageTableID = "RandomizerTableGetItem";
 const std::string Randomizer::hintMessageTableID = "RandomizerHints";
 const std::string Randomizer::merchantMessageTableID = "RandomizerMerchants";
 const std::string Randomizer::rupeeMessageTableID = "RandomizerRupees";
@@ -5414,7 +5415,7 @@ static const char* mapGetItemHints[3][2] = {
 };
 
 CustomMessage Randomizer::GetMapGetItemMessageWithHint(GetItemEntry itemEntry) {
-    CustomMessage messageEntry = CustomMessageManager::Instance->RetrieveMessage(Randomizer::getItemMessageTableID, itemEntry.getItemId);
+    CustomMessage messageEntry = CustomMessageManager::Instance->RetrieveMessage(Randomizer::randomizerTableGetItemMessageTableID, itemEntry.getItemId);
     int sceneNum;
     switch (itemEntry.getItemId) {
         case RG_DEKU_TREE_MAP:
@@ -5464,12 +5465,24 @@ CustomMessage Randomizer::GetMapGetItemMessageWithHint(GetItemEntry itemEntry) {
 }
 
 template<size_t N>
-void CreateGetItemMessages(const std::array<GetItemMessage, N>* messageEntries) {
+void CreateVanillaGetItemMessages(const std::array<GetItemMessage, N>* messageEntries) {
     CustomMessageManager* customMessageManager = CustomMessageManager::Instance;
-    customMessageManager->AddCustomMessageTable(Randomizer::getItemMessageTableID);
+    customMessageManager->AddCustomMessageTable(Randomizer::vanillaTableGetItemMessageTableID);
     for (const GetItemMessage& messageEntry : *messageEntries) {
         customMessageManager->CreateGetItemMessage(
-            Randomizer::getItemMessageTableID, messageEntry.giid, messageEntry.iid,
+            Randomizer::vanillaTableGetItemMessageTableID, messageEntry.giid, messageEntry.iid,
+            CustomMessage(messageEntry.english, messageEntry.german, messageEntry.french, TEXTBOX_TYPE_BLUE,
+                          TEXTBOX_POS_BOTTOM));
+    }
+}
+
+template<size_t N>
+void CreateRandomizerGetItemMessages(const std::array<GetItemMessage, N>* messageEntries) {
+    CustomMessageManager* customMessageManager = CustomMessageManager::Instance;
+    customMessageManager->AddCustomMessageTable(Randomizer::randomizerTableGetItemMessageTableID);
+    for (const GetItemMessage& messageEntry : *messageEntries) {
+        customMessageManager->CreateGetItemMessage(
+            Randomizer::randomizerTableGetItemMessageTableID, messageEntry.giid, messageEntry.iid,
             CustomMessage(messageEntry.english, messageEntry.german, messageEntry.french, TEXTBOX_TYPE_BLUE,
                           TEXTBOX_POS_BOTTOM));
     }
@@ -5866,69 +5879,68 @@ CustomMessage Randomizer::GetGoronMessage(u16 index) {
 void Randomizer::CreateCustomMessages() {
     // RANDTODO: Translate into french and german and replace GIMESSAGE_UNTRANSLATED
     // with GIMESSAGE(getItemID, itemID, english, german, french).
-    const std::array<GetItemMessage, 84> getItemMessages = {{
-
-        GIMESSAGE(RG_PROGRESSIVE_BOMB_BAG, ITEM_BOMB_BAG_20, 
+    const std::array<GetItemMessage, 28> vanillaTableGetItemMessages = {{
+        GIMESSAGE(GI_BOMB_BAG_20, ITEM_BOMB_BAG_20, 
             "You found a %rBomb Bag%w!&If you see something&suspicious, bomb it!", 
             "You found a %rBomb Bag%w!&If you see something&suspicious, bomb it!",  
             "Vous obtenez un %rSac de &Bombes%w!"),
-        GIMESSAGE(RG_PROGRESSIVE_BOW, ITEM_BOW, 
+        GIMESSAGE(GI_BOW, ITEM_BOW, 
             "You found the %rFairy Bow%w!", 
             "You found the %rFairy Bow%w!", 
             "Vous obtenez l'%rArc des Fées%w!"),
-        GIMESSAGE(RG_FIRE_ARROWS, ITEM_ARROW_FIRE, 
+        GIMESSAGE(GI_ARROW_FIRE, ITEM_ARROW_FIRE, 
             "You got the %rFire Arrow%w!&If you hit your target,&it will catch fire.", 
             "You got the %rFire Arrow%w!&If you hit your target,&it will catch fire.", 
             "Vous obtenez la %rFlèche de&Feu!%w! Tirez et embrasez&votre cible!"),
-        GIMESSAGE(RG_ICE_ARROWS, ITEM_ARROW_ICE, 
+        GIMESSAGE(GI_ARROW_ICE, ITEM_ARROW_ICE, 
             "You got the %bIce Arrow%w!&If you hit your target,&it will freeze.", 
             "You got the %bIce Arrow%w!&If you hit your target,&it will freeze.", 
             "Vous obtenez la %bFlèche de&Glace!%w! Tirez et gelez&votre cible!"),
-        GIMESSAGE(RG_LIGHT_ARROWS, ITEM_ARROW_LIGHT, 
+        GIMESSAGE(GI_ARROW_LIGHT, ITEM_ARROW_LIGHT, 
             "You got the %cLight Arrow%w!&The light of justice will&smite evil!", 
             "You got the %cLight Arrow%w!&The light of justice will&smite evil!", 
             "Vous obtenez la %cFlèche de&Lumière!%w! La clarté de la&Justice dissipera le Malin!"),
-        GIMESSAGE(RG_DINS_FIRE, ITEM_DINS_FIRE, 
+        GIMESSAGE(GI_DINS_FIRE, ITEM_DINS_FIRE, 
             "You got %rDin's Fire%w!&Its fireball engulfs everything!", 
             "You got %rDin's Fire%w!&Its fireball engulfs everything!", 
             "Vous obtenez le %rFeu de Din%w!&Invoquez une puissante aura de&feu destructrice!"), 
-        GIMESSAGE(RG_FARORES_WIND, ITEM_FARORES_WIND, 
+        GIMESSAGE(GI_FARORES_WIND, ITEM_FARORES_WIND, 
             "You got %gFarore's Wind%w!&This is warp magic you can use!", 
             "You got %gFarore's Wind%w!&This is warp magic you can use!",  
             "Vous obtenez le %gVent de&Farore%w! Ce sortilège vous&permettra de vous téléporter."), 
-        GIMESSAGE(RG_NAYRUS_LOVE, ITEM_NAYRUS_LOVE, 
+        GIMESSAGE(GI_NAYRUS_LOVE, ITEM_NAYRUS_LOVE, 
             "You got %bNayru's Love%w!&Cast this to create a powerful&protective barrier.", 
             "You got %bNayru's Love%w!&Cast this to create a powerful&protective barrier.", 
             "Vous obtenez l%bAmour de&Nayru%w! Ce sortilège vous&permettra d'invoquer&une barrière protectrice."),
-        GIMESSAGE(RG_PROGRESSIVE_SLINGSHOT, ITEM_SLINGSHOT, 
+        GIMESSAGE(GI_SLINGSHOT, ITEM_SLINGSHOT, 
             "You found the %rFairy Slingshot%w!", 
             "You found the %rFairy Slingshot%w!", 
             "Vous obtenez %rLance-Pierre&des Fées!%w!"),
-        GIMESSAGE(RG_PROGRESSIVE_OCARINA, ITEM_OCARINA_FAIRY, 
+        GIMESSAGE(GI_OCARINA_FAIRY, ITEM_OCARINA_FAIRY, 
             "You received the %rFairy Ocarina%w!&This is a memento from Saria.", 
             "You received the %rFairy Ocarina%w!&This is a memento from Saria.", 
             "Vous obtenez l'%rOcarina des&Fées%w! C'est un cadeau de Saria."),
-        GIMESSAGE(RG_PROGRESSIVE_OCARINA, ITEM_OCARINA_TIME, 
+        GIMESSAGE(GI_OCARINA_OOT, ITEM_OCARINA_TIME, 
             "You found the %rOcarina of Time%w!&It glows with a mystical light...", 
             "You found the %rOcarina of Time%w!&It glows with a mystical light...", 
             "Vous obtenez l'%rOcarina du&Temps%w! Il rayonne d'une lumière&mystique..."),
-        GIMESSAGE(RG_PROGRESSIVE_BOMBCHUS, ITEM_BOMBCHU, 
+        GIMESSAGE(GI_BOMBCHUS_5, ITEM_BOMBCHU, 
             "fff", 
             "fff", 
             "fff"),
-        GIMESSAGE(RG_PROGRESSIVE_HOOKSHOT, ITEM_HOOKSHOT, 
+        GIMESSAGE(GI_HOOKSHOT, ITEM_HOOKSHOT, 
             "You found the %rHookshot%w!&It's a spring-loaded chain that&you can cast out to hook things.", 
             "You found the %rHookshot%w!&It's a spring-loaded chain that&you can cast out to hook things.", 
             "Vous obtenez le %rGrappin%w!&Cette chaîne montée sur&ressort peut s'accrocher à&certaines choses."),
-        GIMESSAGE(RG_BOOMERANG, ITEM_BOOMERANG, 
+        GIMESSAGE(GI_BOOMERANG, ITEM_BOOMERANG, 
             "You found the %rBoomerang%w!", 
             "You found the %rBoomerang%w!", 
             "Vous obtenez le %rBoomreang%w!"),
-        GIMESSAGE(RG_LENS_OF_TRUTH, ITEM_LENS, 
+        GIMESSAGE(GI_LENS, ITEM_LENS, 
             "You found the %rLens of Truth%w!&Mysterious things are hidden&everywhere!", 
             "You found the %rLens of Truth%w!&Mysterious things are hidden&everywhere!", 
             "Vous obtenez le %rMonocle de&Vérité!%w Certains éléments sont&dissimulés un peu partout!"),
-        GIMESSAGE(RG_MEGATON_HAMMER, ITEM_HAMMER, 
+        GIMESSAGE(GI_HAMMER, ITEM_HAMMER, 
             "You found the %rMegaton Hammer%w!&It's so heavy, you need to&use two hands to swing it!", 
             "You found the %rMegaton Hammer%w!&It's so heavy, you need to&use two hands to swing it!", 
             "Vous obtenez la %rMasse des&Titans%w! Utilise le pour&écraser quelque chose!"),
@@ -5938,52 +5950,54 @@ void Randomizer::CreateCustomMessages() {
 
 
 
-        GIMESSAGE(RG_PROGRESSIVE_STRENGTH, ITEM_BRACELET, 
+        GIMESSAGE(GI_BRACELET, ITEM_BRACELET, 
             "You got the %rGoron's Bracelet%w!&Now you can pull up Bomb&Flowers.",
             "You got the %rGoron's Bracelet%w!&Now you can pull up Bomb&Flowers.",
             "Vous obtenez le %rBracelet&Goron%w! Vous pouvez désormais&soulever les Choux-Péteurs."),
-        GIMESSAGE(RG_PROGRESSIVE_STRENGTH, ITEM_GAUNTLETS_SILVER, 
+        GIMESSAGE(GI_GAUNTLETS_SILVER, ITEM_GAUNTLETS_SILVER, 
             "You found the %bSilver Gauntlets%w!&You feel the power to lift&big things with it!",
             "You found the %bSilver Gauntlets%w!&You feel the power to lift&big things with it!",
             "Vous trouvez les %bGantelets&d'argent%w! En les portant vous&pouvez soulever d'énormes&objets avec!" ),
-        GIMESSAGE(RG_PROGRESSIVE_STRENGTH, ITEM_GAUNTLETS_GOLD, 
+        GIMESSAGE(GI_GAUNTLETS_GOLD, ITEM_GAUNTLETS_GOLD, 
             "You found the %bGolden Gauntlets%w!&You can feel even more power&coursing through your arms!",
             "You found the %bGolden Gauntlets%w!&You can feel even more power&coursing through your arms!",
             "Vous trouvez les %bGantelets&d'or%w! Une puissance démesurée&vous envahit!"),
-        GIMESSAGE(RG_PROGRESSIVE_SCALE, ITEM_SCALE_SILVER, 
+        GIMESSAGE(GI_SCALE_SILVER, ITEM_SCALE_SILVER, 
             "You got the %bSilver Scale%w!&You can dive deeper than you&could before.",
             "You got the %bSilver Scale%w!&You can dive deeper than you&could before.",
             "Vous recevez l'%bEcaille&d'argent%w! Vous pouvez&désormais&plonger plus&profondément. "),
-        GIMESSAGE(RG_PROGRESSIVE_SCALE, ITEM_SCALE_GOLDEN, 
+        GIMESSAGE(GI_SCALE_GOLD, ITEM_SCALE_GOLDEN, 
             "You got the %bGolden Scale%w!&Now you can dive much&deeper than you could before!",
             "You got the %bGolden Scale%w!&Now you can dive much&deeper than you could before!",
             "Vous recevez l'%bEcaille d'or%w!&Vous pouvez désormais plonger&encore plus profondément!"),
-        GIMESSAGE(RG_KOKIRI_SWORD, ITEM_SWORD_KOKIRI, 
+        GIMESSAGE(GI_SWORD_KOKIRI, ITEM_SWORD_KOKIRI, 
             "You got the %gKokiri Sword%w!&This is a hidden treasure of&the Kokiri.",
             "You got the %gKokiri Sword%w!&This is a hidden treasure of&the Kokiri.",
             "Vous trouvez l'%gEpée Kokiri%w!&Cette lame est le trésor&secret de la tribu Kokiri."),
-        GIMESSAGE(RG_BIGGORON_SWORD, ITEM_SWORD_BGS, 
+        GIMESSAGE(GI_SWORD_BGS, ITEM_SWORD_BGS, 
             "You got the %rBiggoron's Sword%w!&This blade was forged by a &master smith and won't break!",
             "You got the %rBiggoron's Sword%w!&This blade was forged by a &master smith and won't break!",
             "You got the %rBiggoron's Sword%w!&This blade was forged by a &master smith and won't break!"),
-        GIMESSAGE(RG_DEKU_SHIELD, ITEM_SHIELD_DEKU, 
+        GIMESSAGE(GI_SHIELD_DEKU, ITEM_SHIELD_DEKU, 
             "You got a %cDeku Shield%w!",
             "You got a %cDeku Shield%w!",
             "Vous obtenez un %cBouclier&Mojo!"),
-        GIMESSAGE(RG_HYLIAN_SHIELD, ITEM_SHIELD_HYLIAN, 
+        GIMESSAGE(GI_SHIELD_HYLIAN, ITEM_SHIELD_HYLIAN, 
             "You got a %cHylian Shield%w!",
             "You got a %cHylian Shield%w!",
             "Vous obtenez un %cBouclier&Hylien%w!"),
-        GIMESSAGE(RG_MIRROR_SHIELD, ITEM_SHIELD_MIRROR, 
+        GIMESSAGE(GI_SHIELD_MIRROR, ITEM_SHIELD_MIRROR, 
             "You found the %cMirror Shield%w!&The shield's polished surface can&reflect light or energy.", 
             "You found the %cMirror Shield%w!&The shield's polished surface can&reflect light or energy.",
             "Vous trouvez le %cBouclier&Miroir%w! Ce bouclier peut&réfléchir lumière et énergie."),
-        GIMESSAGE(RG_HOVER_BOOTS, ITEM_BOOTS_HOVER, 
+        GIMESSAGE(GI_BOOTS_HOVER, ITEM_BOOTS_HOVER, 
             "You got the %rHover Boots%w!&With these mysterious boots&you can hover above the ground.",
             "You got the %rHover Boots%w!&With these mysterious boots&you can hover above the ground.",
             "You got the %rHover Boots%w!&With these mysterious boots&you can hover above the ground."),
         //GIMESSAGE_NO_GERMAN(, , "", "", ""),
+    }};
 
+    const std::array<GetItemMessage, 56> randomizerTableGetItemMessages = {{
         GIMESSAGE(RG_GREG_RUPEE, ITEM_MASK_GORON, 
 			"You found %gGreg%w!",
 			"%gGreg%w! Du hast ihn wirklich gefunden!",
@@ -6215,7 +6229,8 @@ void Randomizer::CreateCustomMessages() {
 			"Du erhältst die %rGoldene&Geldbörse%w! Die größte aller&Geldbörsen! Jetzt kannst Du bis&zu %y999 Rubine%w mit dir führen!",
 			"Vous obtenez la %rBourse de Magnat%w!&Elle peut contenir jusqu'à %y999 rubis%w!&C'est gigantesque!")
     }};
-    CreateGetItemMessages(&getItemMessages);
+    CreateVanillaGetItemMessages(&vanillaTableGetItemMessages);
+    CreateRandomizerGetItemMessages(&randomizerTableGetItemMessages);
     CreateRupeeMessages();
     CreateTriforcePieceMessages();
     CreateNaviRandoMessages();

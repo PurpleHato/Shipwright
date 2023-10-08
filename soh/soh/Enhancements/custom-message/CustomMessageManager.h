@@ -169,6 +169,16 @@ class CustomMessageManager {
      */
     CustomMessage RetrieveMessage(std::string tableID, uint16_t textID);
 
+     /**
+     * @brief Checks if table and message exists. Returns false if either
+     * doesn't exist, or true otherwise.
+     *
+     * @param tableID the ID of the custom message table
+     * @param textID the ID of the message you want to retrieve
+     * @return bool
+     */
+    bool DoesMessageExist(std::string tableID, uint16_t textID);
+
     /**
      * @brief Empties out the message table identified by tableID.
      *
