@@ -1980,11 +1980,7 @@ extern "C" int CustomMessage_RetrieveIfExists(PlayState* play) {
     s16 actorParams = 0;
     if (IS_RANDO) {
         Player* player = GET_PLAYER(play);
-        // Get custom textbox for items in the vanilla item table and the extended vanilla item table.
-        // Exclude treasure chest minigame key and rupees.
-        if (player->getItemEntry.objectId != OBJECT_INVALID && player->getItemEntry.modIndex == 0) {
-            messageEntry = Randomizer_GetCustomVanillaGetItemMessage(player);
-        } else if (textId == TEXT_RANDOMIZER_CUSTOM_ITEM) {
+        if (textId == TEXT_RANDOMIZER_CUSTOM_ITEM) {
             if (player->getItemEntry.getItemId == RG_ICE_TRAP) {
                 u16 iceTrapTextId = Random(0, NUM_ICE_TRAP_MESSAGES);
                 messageEntry = CustomMessageManager::Instance->RetrieveMessage(Randomizer::IceTrapRandoMessageTableID, iceTrapTextId);
@@ -2135,6 +2131,9 @@ extern "C" int CustomMessage_RetrieveIfExists(PlayState* play) {
                 textId == TEXT_SARIAS_SONG_FOREST_TEMPLE) {
                 messageEntry = OTRGlobals::Instance->gRandomizer->GetSariaMessage(textId);
             }
+        // Get custom textbox for items in the vanilla item table and the extended vanilla item table.
+        } else if (player->getItemEntry.objectId != OBJECT_INVALID && player->getItemEntry.modIndex == 0) {
+            messageEntry = Randomizer_GetCustomVanillaGetItemMessage(player);
         }
     }
     if (textId == TEXT_GS_NO_FREEZE || textId == TEXT_GS_FREEZE) {
