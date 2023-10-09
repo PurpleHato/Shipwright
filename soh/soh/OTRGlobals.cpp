@@ -1948,13 +1948,14 @@ extern "C" ItemObtainability Randomizer_GetItemObtainabilityFromRandomizerCheck(
 }
 
 CustomMessage Randomizer_GetCustomVanillaGetItemMessage(Player* player) {
-    s16 giid;
-    if (player->getItemEntry.objectId != OBJECT_INVALID) {
-        giid = player->getItemEntry.getItemId;
+    CustomMessage getItemText;
+    GetItemEntry getItemEntry = player->getItemEntry;
+    if (getItemEntry.objectId == OBJECT_GI_MEDAL || getItemEntry.objectId == OBJECT_GI_JEWEL ||
+        getItemEntry.objectId == OBJECT_GI_MELODY) {
+        getItemText = CustomMessageManager::Instance->RetrieveMessage(Randomizer::randomizerTableGetItemMessageTableID, getItemEntry.getItemId);
     } else {
-        giid = player->getItemId;
+        getItemText = CustomMessageManager::Instance->RetrieveMessage(Randomizer::vanillaTableGetItemMessageTableID, getItemEntry.getItemId);
     }
-    const CustomMessage getItemText = CustomMessageManager::Instance->RetrieveMessage(Randomizer::vanillaTableGetItemMessageTableID, giid);
     return getItemText;
 }
 
@@ -1969,17 +1970,6 @@ CustomMessage Randomizer_GetCustomRandomizerGetItemMessage(Player* player) {
     return getItemText;
 }
 
-bool Randomizer_IsCustomVanillaGetItemMessage(Player* player) {
-    if (player->getItemEntry.objectId != OBJECT_INVALID && player->getItemEntry.modIndex == 0) {
-        s16 giid = player->getItemEntry.getItemId;
-
-        if (CustomMessageManager::Instance->DoesMessageExist(Randomizer::vanillaTableGetItemMessageTableID, giid)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 extern "C" int CustomMessage_RetrieveIfExists(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     uint16_t textId = msgCtx->textId;
@@ -1990,7 +1980,9 @@ extern "C" int CustomMessage_RetrieveIfExists(PlayState* play) {
     s16 actorParams = 0;
     if (IS_RANDO) {
         Player* player = GET_PLAYER(play);
-        if (Randomizer_IsCustomVanillaGetItemMessage(player)) {
+        // Get custom textbox for items in the vanilla item table and the extended vanilla item table.
+        // Exclude treasure chest minigame key and rupees.
+        if (player->getItemEntry.objectId != OBJECT_INVALID && player->getItemEntry.modIndex == 0) {
             messageEntry = Randomizer_GetCustomVanillaGetItemMessage(player);
         } else if (textId == TEXT_RANDOMIZER_CUSTOM_ITEM) {
             if (player->getItemEntry.getItemId == RG_ICE_TRAP) {

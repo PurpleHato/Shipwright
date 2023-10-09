@@ -188,6 +188,9 @@ const std::string CustomMessage::MESSAGE_END() const {
 }
 
 const std::string CustomMessage::ITEM_OBTAINED(uint8_t x) const {
+    if (x == ITEM_NONE) {
+        return "";
+    }
     return "\x13"s + char(x);
 }
 
@@ -241,19 +244,6 @@ CustomMessage CustomMessageManager::RetrieveMessage(std::string tableID, uint16_
     }
     CustomMessage message = foundMessage->second;
     return message;
-}
-
-bool CustomMessageManager::DoesMessageExist(std::string tableID, uint16_t textID) {
-    std::unordered_map<std::string, CustomMessageTable>::const_iterator foundMessageTable = messageTables.find(tableID);
-    if (foundMessageTable == messageTables.end()) {
-        return false;
-    }
-    CustomMessageTable messageTable = foundMessageTable->second;
-    std::unordered_map<uint16_t, CustomMessage>::const_iterator foundMessage = messageTable.find(textID);
-    if (foundMessage == messageTable.end()) {
-        return false;
-    }
-    return true;
 }
 
 bool CustomMessageManager::ClearMessageTable(std::string tableID) {
