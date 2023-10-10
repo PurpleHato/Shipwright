@@ -5877,7 +5877,7 @@ CustomMessage Randomizer::GetGoronMessage(u16 index) {
 void Randomizer::CreateCustomMessages() {
     // RANDTODO: Translate into french and german and replace GIMESSAGE_UNTRANSLATED
     // with GIMESSAGE(getItemID, itemID, english, german, french).
-    const std::array<GetItemMessage, 124> vanillaTableGetItemMessages = {{
+    const std::vector<GetItemMessage> vanillaTableGetItemMessages = {{
         GIMESSAGE(GI_NONE, ITEM_NONE,
             "%rTEXT ID ERROR!%w",
             "%rTEXT ID ERROR!%w",
@@ -6083,7 +6083,7 @@ void Randomizer::CreateCustomMessages() {
             "",
             "Vous obtenez un %rSac de &Bombes%w!"),
         GIMESSAGE(GI_BOMB_BAG_30, ITEM_NONE,
-            "You got a %rBig Bomb Bag%w!&Now you can carry more &Bombs, up to a maximum of %y30%w!",
+            "You got a %rBig Bomb Bag%w!&Now, you can carry up to %y30%w&Bombs!",
             "",
             ""),
         GIMESSAGE(GI_BOMB_BAG_40, ITEM_NONE,
