@@ -11685,6 +11685,9 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_HEAD];
     }
+    else {
+        return;
+    }
 
     sLinkCape->rightForearmPos.y += 2;
     sLinkCape->leftForearmPos.y += 2;
