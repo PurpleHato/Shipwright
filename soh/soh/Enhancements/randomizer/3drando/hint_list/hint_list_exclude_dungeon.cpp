@@ -1276,11 +1276,11 @@ hintTextTable[RHT_FIRE_TEMPLE_NEAR_BOSS_CHEST] = HintText(CustomMessage("They sa
 
     hintTextTable[RHT_SPIRIT_TEMPLE_HEART] = HintText(CustomMessage("They say that on a #small platform# in the Spirit Temple lies #[[1]]#.",
                                                          /*german*/ "",
-                                                         /*french*/ "", {QM_RED, QM_GREEN}));
+                                                         /*french*/ "Selon moi, sur une #petite plateforme# dans le Temple de l'Esprit repose #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_SPIRIT_TEMPLE_MQ_HEART] = HintText(CustomMessage("They say that guarded by a #ring of flame# in the Spirit Temple is #[[1]]#.",
                                                          /*german*/ "",
-                                                         /*french*/ "Selon moi, ", {QM_RED, QM_GREEN}));
+                                                         /*french*/ "Selon moi, protégé par un #cercle de flammes# dans le Temple de l'Esprit se trouve #[[1]]#.", {QM_RED, QM_GREEN}));
 
   /*--------------------------
   |      SHADOW TEMPLE       |
@@ -1962,7 +1962,7 @@ hintTextTable[RHT_SHADOW_TEMPLE_MAP_CHEST] = HintText(CustomMessage("They say th
 
     hintTextTable[RHT_GERUDO_TRAINING_GROUNDS_HEART] = HintText(CustomMessage("They say that a watching a #trial with Dinalfos# is #[[1]]#.",
                                                                    /*german*/ "",
-                                                                   /*french*/ "Selon moi, ", {QM_RED, QM_GREEN}));
+                                                                   /*french*/ "Selon moi, dans #une épreuve avec un Dinalfos# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
   /*--------------------------
   |      GANONS CASTLE       |
