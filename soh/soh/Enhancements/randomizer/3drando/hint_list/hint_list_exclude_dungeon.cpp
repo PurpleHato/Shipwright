@@ -1673,7 +1673,7 @@ hintTextTable[RHT_SHADOW_TEMPLE_MAP_CHEST] = HintText(CustomMessage("They say th
 
     hintTextTable[RHT_BOTTOM_OF_THE_WELL_RUPEE] = HintText(CustomMessage("They say that a #hidden path through the floor# in the well leads to #[[1]]#.",
                                                               /*german*/ "",
-                                                              /*french*/ "Selon moi, un #passage caché sous le sol #dans le puits# mène à #[[1]]#.", {QM_RED, QM_GREEN}));
+                                                              /*french*/ "Selon moi, un #passage caché sous le sol# dans le puits mène à #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_BOTTOM_OF_THE_WELL_BASEMENT_SUN_FAIRY] = HintText(CustomMessage("They say that an #calling the sun a dead end# within the well reveals #[[1]]#.",
                                                                        /*german*/ "!!!",
