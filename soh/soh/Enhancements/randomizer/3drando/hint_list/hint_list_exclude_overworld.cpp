@@ -1493,55 +1493,56 @@ void StaticData::HintTable_Init_Exclude_Overworld() {
 
     hintTextTable[RHT_POT_KOKIRI_FOREST] = HintText(CustomMessage("They say that a #pot in Kokiri Forest# contains #[[1]]#.",
                                                        /*german*/ "",
-                                                       /*french*/ "", {QM_RED, QM_GREEN}));
+                                                       /*french*/ "Selon moi, une #jarre dans la Fôret Kokiri# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_GERUDO_FORTRESS] = HintText(CustomMessage("They say that a #pot in Gerudo Fortress# contains #[[1]]#.",
                                                          /*german*/ "",
-                                                         /*french*/ "", {QM_RED, QM_GREEN}));
+                                                         /*french*/ "Selon moi, une #jarre dans la Forteresse Gerudo# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_WASTELAND] = HintText(CustomMessage("They say that a #pot in Haunted Wasteland# contains #[[1]]#.",
                                                    /*german*/ "",
-                                                   /*french*/ "", {QM_RED, QM_GREEN}));
+                                                   /*french*/ "Selon moi, une #jarre dans le Désert Hanté# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_MARKET] = HintText(CustomMessage("They say that a #pot in Market# contains #[[1]]#.",
                                                 /*german*/ "",
-                                                /*french*/ "", {QM_RED, QM_GREEN}));
+                                                /*french*/ "Selon moi, une #jarre dans la Place du Marché# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_KAKARIKO] = HintText(CustomMessage("They say that a #pot in Kakariko Village# contains #[[1]]#.",
                                                   /*german*/ "",
-                                                  /*french*/ "", {QM_RED, QM_GREEN}));
+                                                  /*french*/ "Selon moi, une #jarre dans le Village de Cocorico# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_GRAVEYARD] = HintText(CustomMessage("They say that a #pot in Graveyard# contains #[[1]]#.",
                                                    /*german*/ "",
-                                                   /*french*/ "", {QM_RED, QM_GREEN}));
+                                                   /*french*/ "Selon moi, une #jarre dans le Cimetière# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_GORON_CITY] = HintText(CustomMessage("They say that a #pot in Goron City# contains #[[1]]#.",
                                                     /*german*/ "",
-                                                    /*french*/ "", {QM_RED, QM_GREEN}));
+                                                    /*french*/ "Selon moi, une #jarre dans le Village Goron# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_DEATH_MOUNTAIN_CRATER] = HintText(CustomMessage("They say that a #pot in Death Mountain Crater# contains #[[1]]#.",
                                                                /*german*/ "",
-                                                               /*french*/ "", {QM_RED, QM_GREEN}));
+                                                               /*french*/ "Selon moi, une #jarre sur le Mont du Péril# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_ZORAS_DOMAIN] = HintText(CustomMessage("They say that a #pot in Zora's Domain# contains #[[1]]#.",
                                                       /*german*/ "",
-                                                      /*french*/ "", {QM_RED, QM_GREEN}));
+                                                      /*french*/ "Selon moi, une #jarre dans le Domaine Zora# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_ZORAS_FOUNTAIN] = HintText(CustomMessage("They say that a #pot in Zora's Fountain# contains #[[1]]#.",
                                                         /*german*/ "",
-                                                        /*french*/ "", {QM_RED, QM_GREEN}));
+                                                        /*french*/ "Selon moi, une #jarre dans la Fontaine Zora# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_LON_LON_RANCH] = HintText(CustomMessage("They say that a #pot in Lon Lon Ranch# contains #[[1]]#.",
                                                        /*german*/ "",
-                                                       /*french*/ "", {QM_RED, QM_GREEN}));
+                                                       /*french*/ "Selon moi, une #jarre dans le Ranch Lon Lon# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_HYRULE_FIELD] = HintText(CustomMessage("They say that a #pot in Hyrule Field# contains #[[1]]#.",
                                                       /*german*/ "",
-                                                      /*french*/ "", {QM_RED, QM_GREEN}));
+                                                      /*french*/ "Selon moi, une #jarre dans la Plaine d'Hyrule# contient #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_POT_HYRULE_CASTLE] = HintText(CustomMessage("They say that a #pot in Hyrule Castle# contains #[[1]]#.",
                                                        /*german*/ "",
-                                                       /*french*/ "", {QM_RED, QM_GREEN}));
+                                                       /*french*/ "Selon moi, une #jarre dans le Château d'Hyrule# contient #[[1]]#.", {QM_RED, QM_GREEN}));
+
     hintTextTable[RHT_KOKIRI_FOREST_RUPEE] = HintText(CustomMessage("They say that a rupee in a #tranquil forest# hides #[[1]]#.",
                                                          /*german*/ "",
                                                          /*french*/ "", {QM_RED, QM_GREEN}));
