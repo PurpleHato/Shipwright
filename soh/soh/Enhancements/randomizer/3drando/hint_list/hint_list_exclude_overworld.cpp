@@ -1634,43 +1634,43 @@ void StaticData::HintTable_Init_Exclude_Overworld() {
 
     hintTextTable[RHT_ZR_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout on the riverside# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe au bord de la rivière# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse au bord de la rivière# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_KF_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout near a forest shop# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe près d'un magasin forestier# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse près d'un magasin forestier# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_LW_BEAN_SPROUT_NEAR_BRIDGE_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout near the entrance to the forest# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe près de l'entrée de la forêt# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse près de l'entrée de la forêt# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_LW_BEAN_SPROUT_NEAR_THEATER_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout above a sylvan theatre# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe au-dessus d'un théâtre sylvestre# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse au-dessus d'un théâtre sylvestre# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_LH_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout on the lakeside# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe au bord du lac# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse au bord du lac# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_GV_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout on the side of a canyon# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe sur le côté d'un canyon# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse sur le côté d'un canyon# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_COLOSSUS_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout near a temple of the sand# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe près d'un temple du sable# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse près d'un temple du sable# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_GRAVEYARD_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout within a graveyard# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe dans un cimetière# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse dans un cimetière# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_DMC_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout within a volcano# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe dans un volcan# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse dans un volcan# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_DMT_BEAN_SPROUT_FAIRY] = HintText(CustomMessage("They say that #watering a young sprout on the moutainside# reveals #[[1]]#.",
                                             /*german*/ "!!!",
-                                            /*french*/ "Selon moi, #arroser un jeune germe sur le flanc d'une montagne# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
+                                            /*french*/ "Selon moi, #arroser une jeune pousse sur le flanc d'une montagne# révèle #[[1]]#.", {QM_RED, QM_GREEN}));
 
     hintTextTable[RHT_TOT_GOSSIP_STONE_FAIRY] = HintText(CustomMessage("They say that #playing a tune for an odd stone in the ouskirts of the market# reveals #[[1]]#.",
                                             /*german*/ "!!!",
