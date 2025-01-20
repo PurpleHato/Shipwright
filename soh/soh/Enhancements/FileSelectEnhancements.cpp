@@ -21,7 +21,7 @@ std::array<std::string, LANGUAGE_MAX> RandomizerSettingsMenuText[RSM_MAX] = {
         // German
         "Generate New Randomizer Seed",
         // French
-        "Générer une nouvelle Seed pour le Randomizer",
+        "Générer une nouvelle seed pour le Randomizer",
     },
     {
         // English
