@@ -17,3 +17,9 @@ typedef enum {
     HIDDEN,
     ANCHOR_TO_LIFE_METER,
 } PosType;
+
+typedef enum {
+    CAPE_NONE,
+    CAPE_CAPE,
+    CAPE_SCARF,
+} DefaultCapeStyle;

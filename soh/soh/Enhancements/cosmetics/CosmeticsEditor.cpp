@@ -2266,6 +2266,11 @@ static const char* colorSchemes[2] = {
     "N64",
     "Gamecube",
 };
+static const char* capeTypes[3] = { 
+    "None",
+    "Cape",
+    "Scarf"
+};
 
 void CosmeticsEditorWindow::ApplyDungeonKeyColors() {
     // Keyring
@@ -2467,6 +2472,65 @@ void CosmeticsEditorWindow::DrawElement() {
             UIWidgets::Separator(true, true, 2.0f, 2.0f);
 
             DrawCosmeticGroup(COSMETICS_GROUP_LINK);
+            ImGui::Text("Cape and Scarf");
+
+            UIWidgets::CVarCombobox("Type", CVAR_COSMETIC("DefaultCapeType"), capeTypes,
+                                    UIWidgets::ComboboxOptions()
+                                        .DefaultIndex(CAPE_NONE)
+                                        .Color(THEME_COLOR)
+                                        .LabelPosition(UIWidgets::LabelPositions::Near)
+                                        .ComponentAlignment(UIWidgets::ComponentAlignments::Right));
+
+
+            if (UIWidgets::CVarSliderFloat("Cape Length", CVAR_COSMETIC("Link.Cape.Length.Value"),
+                                           UIWidgets::FloatSliderOptions()
+                                               .Format("%.1f")
+                                               .Min(0.5f)
+                                               .Max(9.5f)
+                                               .DefaultValue(3.5f)
+                                               .Step(0.1f)
+                                               .Size(ImVec2(300.0f, 0.0f))
+                                               .Color(THEME_COLOR))) {
+                CVarSetInteger(CVAR_COSMETIC("Link.Cape.Length.Changed"), 1);
+            }
+
+            if (UIWidgets::CVarSliderFloat("Cape Shoulder Width", CVAR_COSMETIC("Link.Cape.Shoulder.Value"),
+                                           UIWidgets::FloatSliderOptions()
+                                               .Format("%.1f")
+                                               .Min(1.0f)
+                                               .Max(20.0f)
+                                               .DefaultValue(10.0f)
+                                               .Step(0.1f)
+                                               .Size(ImVec2(300.0f, 0.0f))
+                                               .Color(THEME_COLOR))) {
+                CVarSetInteger(CVAR_COSMETIC("Link.Cape.Shoulder.Changed"), 1);
+            }
+
+            if (UIWidgets::CVarSliderFloat("Cape Side Sway Magnitude", CVAR_COSMETIC("Link.Cape.Sway.Value"),
+                                           UIWidgets::FloatSliderOptions()
+                                               .Format("%.1f")
+                                               .Min(-20.0f)
+                                               .Max(0.0f)
+                                               .DefaultValue(0.0f)
+                                               .Step(0.1f)
+                                               .Size(ImVec2(300.0f, 0.0f))
+                                               .Color(THEME_COLOR))) {
+                CVarSetInteger(CVAR_COSMETIC("Link.Cape.Sway.Changed"), 1);
+            }
+
+            if (UIWidgets::CVarSliderFloat("Cape Gravity Force", CVAR_COSMETIC("Link.Cape.Gravity.Value"),
+                                           UIWidgets::FloatSliderOptions()
+                                               .Format("%.1f")
+                                               .Min(-15.0f)
+                                               .Max(-0.5f)
+                                               .DefaultValue(-2.5f)
+                                               .Step(0.1f)
+                                               .Size(ImVec2(300.0f, 0.0f))
+                                               .Color(THEME_COLOR))) {
+                CVarSetInteger(CVAR_COSMETIC("Link.Cape.Gravity.Changed"), 1);
+            }
+
+            UIWidgets::Separator(true, true, 2.0f, 2.0f);
             DrawCosmeticGroup(COSMETICS_GROUP_GLOVES);
             DrawCosmeticGroup(COSMETICS_GROUP_MIRRORSHIELD);
             DrawCosmeticGroup(COSMETICS_GROUP_EQUIPMENT);
