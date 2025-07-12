@@ -22,4 +22,5 @@ typedef enum {
     CAPE_NONE,
     CAPE_CAPE,
     CAPE_SCARF,
+    CAPE_HIPS,
 } DefaultCapeStyle;

@@ -101,6 +101,7 @@ static u16 sVerticesMap[GANON_MANT_NUM_STRANDS * GANON_MANT_NUM_JOINTS] = {
 static u8 sMaskTex[MANT_TEX_WIDTH * MANT_TEX_HEIGHT] = { { 0 } };
 
 #include "overlays/ovl_En_Ganon_Mant/ovl_En_Ganon_Mant.h"
+#include <soh/Enhancements/cosmetics/cosmeticsTypes.h>
 
 void EnGanonMant_Init(Actor* thisx, PlayState* play) {
     EnGanonMant* this = (EnGanonMant*)thisx;
@@ -179,7 +180,7 @@ void EnGanonMant_UpdateStrand(PlayState* play, EnGanonMant* this, Vec3f* root, V
 
     delta.y = 0;
 
-    if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) != 0) {
+    if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) != CAPE_NONE) {
         jointLength = CVarGetFloat(CVAR_COSMETIC("Link.Cape.Length.Value"), 3.5f);
         CVarGetFloat(CVAR_COSMETIC("Link.Cape.Length.Value"), 3.5f);
     }

@@ -12631,13 +12631,13 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
 
     sLinkCape->actor.world.pos = this->actor.world.pos;
 
-    if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == 1) {
+    if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == CAPE_CAPE) {
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_L_SHOULDER];
-    } else if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == 2) {
+    } else if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == CAPE_SCARF) {
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_HEAD];
-    } else if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == 3) {
+    } else if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == CAPE_HIPS) {
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_L_SHIN];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_TORSO];
     } else {
