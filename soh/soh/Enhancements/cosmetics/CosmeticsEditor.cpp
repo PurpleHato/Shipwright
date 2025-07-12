@@ -2266,10 +2266,11 @@ static const char* colorSchemes[2] = {
     "N64",
     "Gamecube",
 };
-static const char* capeTypes[3] = { 
+static const char* capeTypes[4] = { 
     "None",
     "Cape",
-    "Scarf"
+    "Scarf",
+    "Hips"
 };
 
 void CosmeticsEditorWindow::ApplyDungeonKeyColors() {
@@ -2482,7 +2483,7 @@ void CosmeticsEditorWindow::DrawElement() {
                                         .ComponentAlignment(UIWidgets::ComponentAlignments::Right));
 
 
-            if (UIWidgets::CVarSliderFloat("Cape Length", CVAR_COSMETIC("Link.Cape.Length.Value"),
+            if (UIWidgets::CVarSliderFloat("Length", CVAR_COSMETIC("Link.Cape.Length.Value"),
                                            UIWidgets::FloatSliderOptions()
                                                .Format("%.1f")
                                                .Min(0.5f)
@@ -2494,7 +2495,7 @@ void CosmeticsEditorWindow::DrawElement() {
                 CVarSetInteger(CVAR_COSMETIC("Link.Cape.Length.Changed"), 1);
             }
 
-            if (UIWidgets::CVarSliderFloat("Cape Shoulder Width", CVAR_COSMETIC("Link.Cape.Shoulder.Value"),
+            if (UIWidgets::CVarSliderFloat("Shoulder Width", CVAR_COSMETIC("Link.Cape.Shoulder.Value"),
                                            UIWidgets::FloatSliderOptions()
                                                .Format("%.1f")
                                                .Min(1.0f)
@@ -2506,7 +2507,19 @@ void CosmeticsEditorWindow::DrawElement() {
                 CVarSetInteger(CVAR_COSMETIC("Link.Cape.Shoulder.Changed"), 1);
             }
 
-            if (UIWidgets::CVarSliderFloat("Cape Side Sway Magnitude", CVAR_COSMETIC("Link.Cape.Sway.Value"),
+            if (UIWidgets::CVarSliderFloat("Back Push", CVAR_COSMETIC("Link.Cape.Backpush.Value"),
+                                           UIWidgets::FloatSliderOptions()
+                                               .Format("%.1f")
+                                               .Min(-10.0f)
+                                               .Max(0.0f)
+                                               .DefaultValue(-9.0f)
+                                               .Step(0.1f)
+                                               .Size(ImVec2(300.0f, 0.0f))
+                                               .Color(THEME_COLOR))) {
+                CVarSetInteger(CVAR_COSMETIC("Link.Cape.Backpush.Changed"), 1);
+            }
+
+            if (UIWidgets::CVarSliderFloat("Side Sway Magnitude", CVAR_COSMETIC("Link.Cape.Sway.Value"),
                                            UIWidgets::FloatSliderOptions()
                                                .Format("%.1f")
                                                .Min(-20.0f)
@@ -2518,7 +2531,7 @@ void CosmeticsEditorWindow::DrawElement() {
                 CVarSetInteger(CVAR_COSMETIC("Link.Cape.Sway.Changed"), 1);
             }
 
-            if (UIWidgets::CVarSliderFloat("Cape Gravity Force", CVAR_COSMETIC("Link.Cape.Gravity.Value"),
+            if (UIWidgets::CVarSliderFloat("Gravity Force", CVAR_COSMETIC("Link.Cape.Gravity.Value"),
                                            UIWidgets::FloatSliderOptions()
                                                .Format("%.1f")
                                                .Min(-15.0f)

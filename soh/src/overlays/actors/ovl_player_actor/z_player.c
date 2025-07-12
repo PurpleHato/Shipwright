@@ -12622,7 +12622,7 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
         }
     }
 
-    sLinkCape->backPush = -9.0f;
+    sLinkCape->backPush = CVarGetFloat(CVAR_COSMETIC("Link.Cape.Backpush.Value"), -9.0f);
     sLinkCape->backSwayMagnitude = 0.0f;
     sLinkCape->sideSwayMagnitude = CVarGetFloat(CVAR_COSMETIC("Link.Cape.Sway.Value"), 0.0f);
     sLinkCape->minDist = CVarGetFloat(CVAR_COSMETIC("Link.Cape.Shoulder.Value"), 10.0f);
@@ -12636,6 +12636,9 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
     } else if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == 2) {
         sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_R_SHOULDER];
         sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_HEAD];
+    } else if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) == 3) {
+        sLinkCape->rightForearmPos = this->bodyPartsPos[PLAYER_BODYPART_L_SHIN];
+        sLinkCape->leftForearmPos = this->bodyPartsPos[PLAYER_BODYPART_TORSO];
     } else {
         return;
     }
