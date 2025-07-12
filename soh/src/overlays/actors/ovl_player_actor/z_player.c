@@ -10967,7 +10967,8 @@ void Player_Init(Actor* thisx, PlayState* play2) {
     Map_SavePlayerInitialInfo(play);
     MREG(64) = 0;
 
-    sLinkCape = (EnGanonMant*)Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_GANON_MANT, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1);
+    sLinkCape = (EnGanonMant*)Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_GANON_MANT, 0.0f, 0.0f, 0.0f, 0,
+                                                 0, 0, 1);
 }
 
 void Player_ApproachZeroBinang(s16* pValue) {

@@ -2266,12 +2266,7 @@ static const char* colorSchemes[2] = {
     "N64",
     "Gamecube",
 };
-static const char* capeTypes[4] = { 
-    "None",
-    "Cape",
-    "Scarf",
-    "Hips"
-};
+static const char* capeTypes[4] = { "None", "Cape", "Scarf", "Hips" };
 
 void CosmeticsEditorWindow::ApplyDungeonKeyColors() {
     // Keyring
@@ -2481,7 +2476,6 @@ void CosmeticsEditorWindow::DrawElement() {
                                         .Color(THEME_COLOR)
                                         .LabelPosition(UIWidgets::LabelPositions::Near)
                                         .ComponentAlignment(UIWidgets::ComponentAlignments::Right));
-
 
             if (UIWidgets::CVarSliderFloat("Length", CVAR_COSMETIC("Link.Cape.Length.Value"),
                                            UIWidgets::FloatSliderOptions()

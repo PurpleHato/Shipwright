@@ -179,9 +179,9 @@ void EnGanonMant_UpdateStrand(PlayState* play, EnGanonMant* this, Vec3f* root, V
 
     delta.y = 0;
 
-     if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) != 0) {
+    if (CVarGetInteger(CVAR_COSMETIC("DefaultCapeType"), 0) != 0) {
         jointLength = CVarGetFloat(CVAR_COSMETIC("Link.Cape.Length.Value"), 3.5f);
-         CVarGetFloat(CVAR_COSMETIC("Link.Cape.Length.Value"), 3.5f);
+        CVarGetFloat(CVAR_COSMETIC("Link.Cape.Length.Value"), 3.5f);
     }
 
     if (this->actor.params == 0x23) {
