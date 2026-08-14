@@ -37,6 +37,7 @@ typedef struct EnGanonMant {
     /* 0x1704 */ u8 tearTimer; // tear the cloak for x many frames
     /* 0x1705 */ u8 updateHasRun;
     /* 0x1706 */ u8 frameTimer;
-} EnGanonMant; // size = 0x1708
+    /* 0x1708 */ f32 linkJointLength; // >0 = override strand joint length (Link cape cosmetic); 0 = vanilla param logic
+} EnGanonMant; // size = 0x170C
 
 #endif

@@ -106,6 +106,7 @@ void EnGanonMant_Init(Actor* thisx, PlayState* play) {
     EnGanonMant* this = (EnGanonMant*)thisx;
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+    this->linkJointLength = 0.0f; // vanilla default; the Link cape cosmetic sets >0 when active
 
     for (int i = 0; i < ARRAY_COUNT(sMaskTex); i++) {
         sMaskTex[i] = 0;
@@ -192,6 +193,11 @@ void EnGanonMant_UpdateStrand(PlayState* play, EnGanonMant* this, Vec3f* root, V
         jointLength = 6.5f;
     } else {
         jointLength = 9.5f;
+    }
+
+    // Link cape cosmetic override (defaults to 0 in Init, so Ganondorf's cape is unaffected).
+    if (this->linkJointLength > 0.0f) {
+        jointLength = this->linkJointLength;
     }
 
     for (i = 0; i < GANON_MANT_NUM_JOINTS; i++, pos++, vel++, rot++, nextPos++) {

@@ -1,5 +1,6 @@
 #include "CosmeticsEditor.h"
 #include "cosmeticsTypes.h"
+#include "CapeAndScarf.h"
 #include "authenticGfxPatches.h"
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 
@@ -2414,6 +2415,7 @@ void CosmeticsEditorWindow::DrawElement() {
             UIWidgets::Separator(true, true, 2.0f, 2.0f);
 
             DrawCosmeticGroup(COSMETICS_GROUP_LINK);
+            DrawCapeAndScarfOptions();
             DrawCosmeticGroup(COSMETICS_GROUP_GLOVES);
             DrawCosmeticGroup(COSMETICS_GROUP_MIRRORSHIELD);
             DrawCosmeticGroup(COSMETICS_GROUP_EQUIPMENT);
